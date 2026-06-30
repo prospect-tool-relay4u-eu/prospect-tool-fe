@@ -3,8 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { FieldDefinition, Project, ProjectSummary } from '../models/project.model';
-
-const API = 'http://localhost:8080/api';
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class ProjectService {
@@ -13,36 +12,36 @@ export class ProjectService {
   readonly projects = signal<ProjectSummary[]>([]);
 
   loadProjects(): Observable<ProjectSummary[]> {
-    return this.http.get<ProjectSummary[]>(`${API}/projects`).pipe(
+    return this.http.get<ProjectSummary[]>(`${environment.apiBase}/projects`).pipe(
       tap(list => this.projects.set(list))
     );
   }
 
   getProject(id: number): Observable<Project> {
-    return this.http.get<Project>(`${API}/projects/${id}`);
+    return this.http.get<Project>(`${environment.apiBase}/projects/${id}`);
   }
 
   createProject(name: string, description: string): Observable<Project> {
-    return this.http.post<Project>(`${API}/projects`, { name, description });
+    return this.http.post<Project>(`${environment.apiBase}/projects`, { name, description });
   }
 
   updateProject(id: number, data: { name: string; description: string }): Observable<Project> {
-    return this.http.put<Project>(`${API}/projects/${id}`, data);
+    return this.http.put<Project>(`${environment.apiBase}/projects/${id}`, data);
   }
 
   deleteProject(id: number): Observable<void> {
-    return this.http.delete<void>(`${API}/projects/${id}`);
+    return this.http.delete<void>(`${environment.apiBase}/projects/${id}`);
   }
 
   addField(projectId: number, data: Omit<FieldDefinition, 'id'>): Observable<FieldDefinition> {
-    return this.http.post<FieldDefinition>(`${API}/projects/${projectId}/fields`, data);
+    return this.http.post<FieldDefinition>(`${environment.apiBase}/projects/${projectId}/fields`, data);
   }
 
   removeField(projectId: number, fieldId: string): Observable<void> {
-    return this.http.delete<void>(`${API}/projects/${projectId}/fields/${fieldId}`);
+    return this.http.delete<void>(`${environment.apiBase}/projects/${projectId}/fields/${fieldId}`);
   }
 
   reorderFields(projectId: number, fieldIds: string[]): Observable<FieldDefinition[]> {
-    return this.http.put<FieldDefinition[]>(`${API}/projects/${projectId}/fields/order`, { fieldIds });
+    return this.http.put<FieldDefinition[]>(`${environment.apiBase}/projects/${projectId}/fields/order`, { fieldIds });
   }
 }

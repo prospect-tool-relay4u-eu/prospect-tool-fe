@@ -14,7 +14,8 @@ interface RegisterResponse {
   email: string;
 }
 
-const API_BASE = 'http://localhost:8080/api';
+import { environment } from '../../../environments/environment';
+
 const TOKEN_KEY = 'r4u-token';
 
 @Injectable({ providedIn: 'root' })
@@ -39,7 +40,7 @@ export class AuthService {
 
   login(email: string, password: string): Observable<LoginResponse> {
     return this.http
-      .post<LoginResponse>(`${API_BASE}/auth/login`, { email, password })
+      .post<LoginResponse>(`${environment.apiBase}/auth/login`, { email, password })
       .pipe(
         tap(res => {
           this._token.set(res.token);
@@ -54,7 +55,7 @@ export class AuthService {
     password: string,
     confirmPassword: string
   ): Observable<RegisterResponse> {
-    return this.http.post<RegisterResponse>(`${API_BASE}/auth/register`, {
+    return this.http.post<RegisterResponse>(`${environment.apiBase}/auth/register`, {
       name,
       email,
       password,

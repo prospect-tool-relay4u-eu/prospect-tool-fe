@@ -1,0 +1,51 @@
+name: Deploy FE to Staging
+
+on:
+  push:
+    branches: [main]
+
+env:
+  REGION: europe-west1
+  REPO: relay4u-repo
+  SERVICE: relay4u-fe-staging
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
+
+      - name: Build and push Docker image
+        env:
+          IMAGE: ${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPO }}/relay4u-fe:${{ github.sha }}
+        run: |
+          docker build \
+            --build-arg BUILD_CONFIG=staging \
+            -t "$IMAGE" \
+            .
+          docker push "$IMAGE"
+
+      - name: Deploy to Cloud Run (Staging)
+        env:
+          IMAGE: ${{ env.REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.REPO }}/relay4u-fe:${{ github.sha }}
+        run: |
+          gcloud run deploy ${{ env.SERVICE }} \
+            --image "$IMAGE" \
+            --region ${{ env.REGION }} \
+            --platform managed \
+            --allow-unauthenticated \
+            --port 80 \
+            --quiet
