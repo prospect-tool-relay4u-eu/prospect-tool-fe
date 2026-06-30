@@ -73,6 +73,6 @@ export class ProjectsListComponent {
   }
 
   formatDate(iso: string): string {
-    return new Date(iso).toLocaleDateString('pl-PL', { day: 'numeric', month: 'short', year: 'numeric' });
+    return new Date(iso).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
   }
 }

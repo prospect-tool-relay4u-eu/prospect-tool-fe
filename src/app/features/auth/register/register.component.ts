@@ -61,8 +61,8 @@ export class RegisterComponent {
       error: err => {
         this.error.set(
           err.status === 409
-            ? 'Konto z tym adresem email już istnieje.'
-            : 'Wystąpił błąd. Spróbuj ponownie.'
+            ? 'An account with this email already exists.'
+            : 'An error occurred. Please try again.'
         );
         this.loading.set(false);
       },

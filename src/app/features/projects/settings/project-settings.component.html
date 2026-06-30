@@ -5,50 +5,50 @@
 
     <div class="page-header">
       <div class="breadcrumb">
-        <a routerLink="/projects" class="bc-link">Projekty</a>
+        <a routerLink="/projects" class="bc-link">Projects</a>
         <span class="bc-sep">/</span>
         <a [routerLink]="['/projects', projectId]" class="bc-link">{{ project()!.name }}</a>
         <span class="bc-sep">/</span>
-        <span class="bc-current">Ustawienia</span>
+        <span class="bc-current">Settings</span>
       </div>
-      <h1 class="page-title">Ustawienia projektu</h1>
+      <h1 class="page-title">Project settings</h1>
     </div>
 
     <!-- Project details -->
     <div class="section form-card">
       <div class="section-header">
-        <h2 class="section-title">Szczegóły projektu</h2>
+        <h2 class="section-title">Project details</h2>
         @if (!editingName()) {
-          <button class="btn btn-ghost btn-sm" (click)="startEditName()">Edytuj</button>
+          <button class="btn btn-ghost btn-sm" (click)="startEditName()">Edit</button>
         }
       </div>
 
       @if (editingName()) {
         <div class="edit-name-form">
           <div class="form-group">
-            <label class="form-label">Nazwa projektu</label>
+            <label class="form-label">Project name</label>
             <input class="form-input" [value]="nameValue()" (input)="nameValue.set($any($event.target).value)"
-                   placeholder="Nazwa projektu" (keydown.enter)="saveName()" />
+                   placeholder="Project name" (keydown.enter)="saveName()" />
           </div>
           <div class="form-group">
-            <label class="form-label">Opis</label>
+            <label class="form-label">Description</label>
             <input class="form-input" [value]="descValue()" (input)="descValue.set($any($event.target).value)"
-                   placeholder="Opcjonalny opis" />
+                   placeholder="Optional description" />
           </div>
           <div class="edit-actions">
-            <button class="btn btn-ghost" (click)="cancelEditName()">Anuluj</button>
-            <button class="btn btn-primary" (click)="saveName()" [disabled]="!nameValue().trim()">Zapisz</button>
+            <button class="btn btn-ghost" (click)="cancelEditName()">Cancel</button>
+            <button class="btn btn-primary" (click)="saveName()" [disabled]="!nameValue().trim()">Save</button>
           </div>
         </div>
       } @else {
         <div class="project-details">
           <div class="detail-row">
-            <span class="detail-label">Nazwa</span>
+            <span class="detail-label">Name</span>
             <span class="detail-value">{{ project()!.name }}</span>
           </div>
           @if (project()!.description) {
             <div class="detail-row">
-              <span class="detail-label">Opis</span>
+              <span class="detail-label">Description</span>
               <span class="detail-value">{{ project()!.description }}</span>
             </div>
           }
@@ -59,16 +59,16 @@
     <!-- Fields management -->
     <div class="section form-card">
       <div class="section-header">
-        <h2 class="section-title">Pola projektu</h2>
-        <span class="field-count">{{ sortedFields().length }} pól</span>
+        <h2 class="section-title">Project fields</h2>
+        <span class="field-count">{{ sortedFields().length }} fields</span>
       </div>
 
       <div class="fields-list">
         @for (field of sortedFields(); track field.id; let first = $first; let last = $last; let i = $index) {
           <div class="field-row">
             <div class="field-order-btns">
-              <button class="order-btn" [disabled]="first" (click)="moveFieldUp(field.id)" aria-label="Przesuń wyżej">↑</button>
-              <button class="order-btn" [disabled]="last" (click)="moveFieldDown(field.id)" aria-label="Przesuń niżej">↓</button>
+              <button class="order-btn" [disabled]="first" (click)="moveFieldUp(field.id)" aria-label="Move up">↑</button>
+              <button class="order-btn" [disabled]="last" (click)="moveFieldDown(field.id)" aria-label="Move down">↓</button>
             </div>
             <div class="field-info">
               <span class="field-label">{{ field.label }}</span>
@@ -76,44 +76,44 @@
             </div>
             <span class="field-type-badge">{{ typeDisplay[field.type] }}</span>
             @if (field.required) {
-              <span class="required-badge">wymagane</span>
+              <span class="required-badge">required</span>
             }
 
             @if (fieldToDelete() === field.id) {
               <div class="delete-confirm-inline">
-                <span class="dc-text">Dane w tej kolumnie zostaną utracone.</span>
-                <button class="btn btn-ghost btn-xs" (click)="cancelDelete()">Anuluj</button>
-                <button class="btn btn-danger btn-xs" (click)="deleteField(field.id)">Usuń pole</button>
+                <span class="dc-text">Data in this column will be lost.</span>
+                <button class="btn btn-ghost btn-xs" (click)="cancelDelete()">Cancel</button>
+                <button class="btn btn-danger btn-xs" (click)="deleteField(field.id)">Delete field</button>
               </div>
             } @else {
-              <button class="del-field-btn" (click)="confirmDelete(field.id)" [disabled]="field.required" aria-label="Usuń pole">✕</button>
+              <button class="del-field-btn" (click)="confirmDelete(field.id)" [disabled]="field.required" aria-label="Delete field">✕</button>
             }
           </div>
         }
         @empty {
-          <p class="no-fields-msg">Brak pól. Dodaj pierwsze pole poniżej.</p>
+          <p class="no-fields-msg">No fields yet. Add your first field below.</p>
         }
       </div>
 
       <!-- Add field form -->
       <div class="add-field-form">
-        <h3 class="add-field-title">Dodaj nowe pole</h3>
+        <h3 class="add-field-title">Add new field</h3>
         @if (addError()) {
           <div class="alert alert-error">{{ addError() }}</div>
         }
         <div class="add-field-row">
           <div class="form-group flex-1">
-            <label class="form-label">Nazwa pola</label>
+            <label class="form-label">Field name</label>
             <input
               class="form-input"
               [value]="newFieldLabel()"
               (input)="newFieldLabel.set($any($event.target).value)"
-              placeholder="np. Za ile kupi?"
+              placeholder="e.g. Budget?"
               (keydown.enter)="addField()"
             />
           </div>
           <div class="form-group">
-            <label class="form-label">Typ</label>
+            <label class="form-label">Type</label>
             <select class="form-input form-select" [value]="newFieldType()" (change)="newFieldType.set($any($event.target).value)">
               @for (type of fieldTypes; track type) {
                 <option [value]="type">{{ typeDisplay[type] }}</option>
@@ -123,7 +123,7 @@
           <div class="form-group form-group-btn">
             <label class="form-label">&nbsp;</label>
             <button class="btn btn-primary" (click)="addField()" [disabled]="!newFieldLabel().trim()">
-              + Dodaj pole
+              + Add field
             </button>
           </div>
         </div>
@@ -133,30 +133,30 @@
     <!-- Danger zone -->
     <div class="section danger-zone">
       <div class="section-header">
-        <h2 class="section-title danger-title">Strefa niebezpieczna</h2>
+        <h2 class="section-title danger-title">Danger zone</h2>
       </div>
 
       <div class="danger-row">
         <div class="danger-desc">
-          <div class="danger-label">Wyczyść wszystkie rekordy</div>
-          <div class="danger-hint">Usuwa trwale wszystkie wiersze danych z tego projektu. Schemat pól pozostaje bez zmian.</div>
+          <div class="danger-label">Clear all records</div>
+          <div class="danger-hint">Permanently deletes all data rows from this project. The field schema remains unchanged.</div>
         </div>
         @if (showClearConfirm()) {
           <div class="clear-confirm">
-            <span class="dc-text">Tej operacji nie można cofnąć.</span>
-            <button class="btn btn-ghost btn-sm" (click)="showClearConfirm.set(false)">Anuluj</button>
-            <button class="btn btn-danger btn-sm" (click)="clearRecords()">Potwierdź usunięcie</button>
+            <span class="dc-text">This action cannot be undone.</span>
+            <button class="btn btn-ghost btn-sm" (click)="showClearConfirm.set(false)">Cancel</button>
+            <button class="btn btn-danger btn-sm" (click)="clearRecords()">Confirm deletion</button>
           </div>
         } @else {
           <button class="btn btn-outline-danger btn-sm" (click)="showClearConfirm.set(true)">
-            Wyczyść rekordy
+            Clear records
           </button>
         }
       </div>
     </div>
 
     <div class="back-row">
-      <a [routerLink]="['/projects', projectId]" class="btn btn-ghost">← Wróć do tabeli</a>
+      <a [routerLink]="['/projects', projectId]" class="btn btn-ghost">← Back to table</a>
     </div>
 
   </div>

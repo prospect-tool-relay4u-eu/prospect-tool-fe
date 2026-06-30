@@ -1,7 +1,7 @@
 <div class="auth-page">
 
   <div class="auth-topbar">
-    <button class="theme-toggle" (click)="theme.toggle()" aria-label="Przełącz motyw">
+    <button class="theme-toggle" (click)="theme.toggle()" aria-label="Toggle theme">
       @if (theme.theme() === 'dark') {
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
@@ -26,31 +26,31 @@
 
     <div class="form-card auth-card">
       <div class="card-header">
-        <h1 class="auth-title">Utwórz konto</h1>
-        <p class="auth-subtitle">Zacznij zarządzać prospectingiem efektywniej</p>
+        <h1 class="auth-title">Create account</h1>
+        <p class="auth-subtitle">Start managing your lists more effectively</p>
       </div>
 
       @if (error()) {
         <div class="alert alert-error">{{ error() }}</div>
       }
       @if (success()) {
-        <div class="alert alert-success">Konto zostało utworzone! Wysłaliśmy kod weryfikacyjny na Twój email.</div>
+        <div class="alert alert-success">Account created! We've sent a verification code to your email.</div>
       }
 
       <form [formGroup]="form" (ngSubmit)="submit()" class="auth-form">
         <div class="form-group">
-          <label class="form-label" for="name">Imię i nazwisko</label>
+          <label class="form-label" for="name">Full name</label>
           <input
             id="name"
             type="text"
             class="form-input"
             [class.error]="form.controls.name.invalid && form.controls.name.touched"
             formControlName="name"
-            placeholder="Jan Kowalski"
+            placeholder="John Smith"
             autocomplete="name"
           />
           @if (form.controls.name.invalid && form.controls.name.touched) {
-            <span class="form-error">Imię musi mieć co najmniej 2 znaki.</span>
+            <span class="form-error">Name must be at least 2 characters.</span>
           }
         </div>
 
@@ -62,43 +62,43 @@
             class="form-input"
             [class.error]="form.controls.email.invalid && form.controls.email.touched"
             formControlName="email"
-            placeholder="jan@firma.pl"
+            placeholder="john@company.com"
             autocomplete="email"
           />
           @if (form.controls.email.invalid && form.controls.email.touched) {
-            <span class="form-error">Podaj prawidłowy adres email.</span>
+            <span class="form-error">Please enter a valid email address.</span>
           }
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="password">Hasło</label>
+          <label class="form-label" for="password">Password</label>
           <input
             id="password"
             type="password"
             class="form-input"
             [class.error]="form.controls.password.invalid && form.controls.password.touched"
             formControlName="password"
-            placeholder="Min. 8 znaków"
+            placeholder="Min. 8 characters"
             autocomplete="new-password"
           />
           @if (form.controls.password.invalid && form.controls.password.touched) {
-            <span class="form-error">Hasło musi mieć co najmniej 8 znaków.</span>
+            <span class="form-error">Password must be at least 8 characters.</span>
           }
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="confirmPassword">Potwierdź hasło</label>
+          <label class="form-label" for="confirmPassword">Confirm password</label>
           <input
             id="confirmPassword"
             type="password"
             class="form-input"
             [class.error]="form.errors?.['passwordsMismatch'] && form.controls.confirmPassword.touched"
             formControlName="confirmPassword"
-            placeholder="Powtórz hasło"
+            placeholder="Repeat password"
             autocomplete="new-password"
           />
           @if (form.errors?.['passwordsMismatch'] && form.controls.confirmPassword.touched) {
-            <span class="form-error">Hasła nie są identyczne.</span>
+            <span class="form-error">Passwords do not match.</span>
           }
         </div>
 
@@ -108,15 +108,15 @@
           [disabled]="loading() || success()"
         >
           @if (loading()) {
-            Tworzenie konta...
+            Creating account...
           } @else {
-            Zarejestruj się
+            Sign up
           }
         </button>
       </form>
 
       <p class="auth-switch">
-        Masz już konto? <a routerLink="/login">Zaloguj się</a>
+        Already have an account? <a routerLink="/login">Log in</a>
       </p>
     </div>
 

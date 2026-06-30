@@ -1,7 +1,7 @@
 <div class="auth-page">
 
   <div class="auth-topbar">
-    <button class="theme-toggle" (click)="theme.toggle()" aria-label="Przełącz motyw">
+    <button class="theme-toggle" (click)="theme.toggle()" aria-label="Toggle theme">
       @if (theme.theme() === 'dark') {
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
@@ -26,12 +26,12 @@
 
     <div class="form-card auth-card">
       <div class="card-header">
-        <h1 class="auth-title">Zaloguj się</h1>
-        <p class="auth-subtitle">Witaj ponownie — zaloguj się na swoje konto</p>
+        <h1 class="auth-title">Log in</h1>
+        <p class="auth-subtitle">Welcome back — log in to your account</p>
       </div>
 
       @if (verified()) {
-        <div class="alert alert-success">Konto zweryfikowane! Możesz się teraz zalogować.</div>
+        <div class="alert alert-success">Account verified! You can now log in.</div>
       }
       @if (error()) {
         <div class="alert alert-error">{{ error() }}</div>
@@ -46,16 +46,16 @@
             class="form-input"
             [class.error]="form.controls.email.invalid && form.controls.email.touched"
             formControlName="email"
-            placeholder="jan@firma.pl"
+            placeholder="john@company.com"
             autocomplete="email"
           />
           @if (form.controls.email.invalid && form.controls.email.touched) {
-            <span class="form-error">Podaj prawidłowy adres email.</span>
+            <span class="form-error">Please enter a valid email address.</span>
           }
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="password">Hasło</label>
+          <label class="form-label" for="password">Password</label>
           <input
             id="password"
             type="password"
@@ -69,15 +69,15 @@
 
         <button type="submit" class="btn btn-primary btn-lg btn-block" [disabled]="loading()">
           @if (loading()) {
-            Logowanie...
+            Logging in...
           } @else {
-            Zaloguj się
+            Log in
           }
         </button>
       </form>
 
       <p class="auth-switch">
-        Nie masz konta? <a routerLink="/register">Zarejestruj się</a>
+        Don't have an account? <a routerLink="/register">Sign up</a>
       </p>
     </div>
 

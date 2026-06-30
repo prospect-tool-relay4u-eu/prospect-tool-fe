@@ -8,10 +8,10 @@ import { NavbarComponent } from '../../shared/navbar/navbar.component';
 import { AutoFocusDirective } from '../../../shared/directives/auto-focus.directive';
 
 const TYPE_LABELS: Record<string, string> = {
-  STRING: 'tekst',
-  BOOLEAN: 'tak/nie',
-  INTEGER: 'liczba',
-  NUMBER: 'liczba',
+  STRING: 'text',
+  BOOLEAN: 'yes/no',
+  INTEGER: 'number',
+  NUMBER: 'number',
 };
 
 @Component({
@@ -114,7 +114,7 @@ export class ProjectTableComponent implements OnInit {
     const val = record.values[field.key];
     if (val == null || val === '') return '';
     if ((field.type === 'INTEGER' || field.type === 'NUMBER') && typeof val === 'number') {
-      return val.toLocaleString('pl-PL');
+      return val.toLocaleString('en-US');
     }
     return String(val);
   }
@@ -136,8 +136,7 @@ export class ProjectTableComponent implements OnInit {
   }
 
   recordCountLabel(count: number): string {
-    if (count === 1) return '1 rekord';
-    if (count >= 2 && count <= 4) return `${count} rekordy`;
-    return `${count} rekordów`;
+    if (count === 1) return '1 record';
+    return `${count} records`;
   }
 }

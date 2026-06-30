@@ -4,45 +4,45 @@
 
   <div class="page-header">
     <div>
-      <h1 class="page-title">Projekty</h1>
-      <p class="page-subtitle">Każdy projekt ma własną strukturę pól</p>
+      <h1 class="page-title">Projects</h1>
+      <p class="page-subtitle">Each project has its own field structure</p>
     </div>
     @if (!showNewForm()) {
-      <button class="btn btn-primary" (click)="openNewForm()">+ Nowy projekt</button>
+      <button class="btn btn-primary" (click)="openNewForm()">+ New project</button>
     }
   </div>
 
   @if (showNewForm()) {
     <div class="new-project-panel form-card">
-      <h2 class="panel-title">Nowy projekt</h2>
+      <h2 class="panel-title">New project</h2>
       <div class="panel-fields">
         <div class="form-group">
-          <label class="form-label" for="proj-name">Nazwa projektu</label>
+          <label class="form-label" for="proj-name">Project name</label>
           <input
             id="proj-name"
             class="form-input"
             [value]="newName()"
             (input)="newName.set($any($event.target).value)"
-            placeholder="np. Kampania B2B Q3"
+            placeholder="e.g. B2B Campaign Q3"
             (keydown.enter)="createProject()"
             autofocus
           />
         </div>
         <div class="form-group">
-          <label class="form-label" for="proj-desc">Opis (opcjonalny)</label>
+          <label class="form-label" for="proj-desc">Description (optional)</label>
           <input
             id="proj-desc"
             class="form-input"
             [value]="newDesc()"
             (input)="newDesc.set($any($event.target).value)"
-            placeholder="Krótki opis projektu"
+            placeholder="Short project description"
           />
         </div>
       </div>
       <div class="panel-actions">
-        <button class="btn btn-ghost" (click)="cancelNewForm()">Anuluj</button>
+        <button class="btn btn-ghost" (click)="cancelNewForm()">Cancel</button>
         <button class="btn btn-primary" (click)="createProject()" [disabled]="!newName().trim()">
-          Utwórz projekt
+          Create project
         </button>
       </div>
     </div>
@@ -51,13 +51,13 @@
   @if (projects().length === 0 && !showNewForm()) {
     <div class="empty-state">
       <div class="empty-icon">📋</div>
-      <h3 class="empty-title">Brak projektów</h3>
+      <h3 class="empty-title">No projects yet</h3>
       <p class="empty-desc">
-        Stwórz pierwszy projekt, żeby zacząć śledzić swój prospecting.
-        Po utworzeniu możesz dodać własne pola w ustawieniach projektu.
+        Create your first project to start tracking your data.
+        Once created, you can add your own fields in the project settings.
       </p>
       <button class="btn btn-primary btn-lg" (click)="openNewForm()">
-        + Stwórz pierwszy projekt
+        + Create first project
       </button>
     </div>
   }
@@ -77,9 +77,9 @@
           </div>
 
           <div class="project-meta-row">
-            <span class="meta-chip">{{ project.fieldCount }} pól</span>
+            <span class="meta-chip">{{ project.fieldCount }} fields</span>
             <span class="meta-sep">·</span>
-            <span class="meta-chip">{{ project.recordCount }} rekordów</span>
+            <span class="meta-chip">{{ project.recordCount }} records</span>
           </div>
 
           <div class="project-footer">
@@ -87,15 +87,15 @@
 
             @if (deleteConfirmId() === project.id) {
               <div class="delete-confirm" (click)="$event.stopPropagation()">
-                <span class="delete-question">Usunąć?</span>
-                <button class="btn btn-ghost btn-xs" (click)="cancelDelete($event)">Nie</button>
-                <button class="btn btn-danger btn-xs" (click)="deleteProject(project.id, $event)">Tak, usuń</button>
+                <span class="delete-question">Delete?</span>
+                <button class="btn btn-ghost btn-xs" (click)="cancelDelete($event)">No</button>
+                <button class="btn btn-danger btn-xs" (click)="deleteProject(project.id, $event)">Yes, delete</button>
               </div>
             } @else {
               <button
                 class="delete-btn"
                 (click)="confirmDelete(project.id, $event)"
-                aria-label="Usuń projekt"
+                aria-label="Delete project"
               >✕</button>
             }
           </div>

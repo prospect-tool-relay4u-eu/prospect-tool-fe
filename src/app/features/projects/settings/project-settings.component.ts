@@ -7,10 +7,10 @@ import { RecordService } from '../../../core/services/record.service';
 import { NavbarComponent } from '../../shared/navbar/navbar.component';
 
 const TYPE_DISPLAY: Record<FieldType, string> = {
-  STRING: 'Tekst',
-  BOOLEAN: 'Tak/Nie',
-  INTEGER: 'Liczba całkowita',
-  NUMBER: 'Liczba',
+  STRING: 'Text',
+  BOOLEAN: 'Yes/No',
+  INTEGER: 'Integer',
+  NUMBER: 'Number',
 };
 
 @Component({
@@ -87,7 +87,7 @@ export class ProjectSettingsComponent implements OnInit {
 
     const existingKeys = new Set(this.sortedFields().map(f => f.key));
     let key = generateSlug(label);
-    if (!key) { this.addError.set('Nieprawidłowa nazwa pola.'); return; }
+    if (!key) { this.addError.set('Invalid field name.'); return; }
     let counter = 2;
     while (existingKeys.has(key)) { key = `${generateSlug(label)}_${counter++}`; }
 

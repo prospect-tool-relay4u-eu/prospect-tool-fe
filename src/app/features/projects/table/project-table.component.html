@@ -6,16 +6,16 @@
     <!-- Toolbar -->
     <div class="toolbar">
       <div class="toolbar-left">
-        <a routerLink="/projects" class="breadcrumb-link">Projekty</a>
+        <a routerLink="/projects" class="breadcrumb-link">Projects</a>
         <span class="breadcrumb-sep">/</span>
         <span class="breadcrumb-current">{{ project()!.name }}</span>
       </div>
       <div class="toolbar-right">
         <a [routerLink]="['/projects', projectId, 'settings']" class="btn btn-ghost">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-          Zarządzaj polami
+          Manage fields
         </a>
-        <button class="btn btn-primary" (click)="addRecord()">+ Dodaj rekord</button>
+        <button class="btn btn-primary" (click)="addRecord()">+ Add record</button>
       </div>
     </div>
 
@@ -23,8 +23,8 @@
     @if (sortedFields().length === 0) {
       <div class="no-fields">
         <p>
-          Projekt nie ma jeszcze żadnych pól.
-          <a [routerLink]="['/projects', projectId, 'settings']">Dodaj pola</a> żeby zacząć.
+          This project has no fields yet.
+          <a [routerLink]="['/projects', projectId, 'settings']">Add fields</a> to get started.
         </p>
       </div>
     } @else {
@@ -55,9 +55,9 @@
                     @if (field.type === 'BOOLEAN') {
                       <div class="cell-bool" (click)="toggleBoolean(record.id, field.key)">
                         @if (getBoolValue(record, field.key)) {
-                          <span class="badge badge-green">Tak</span>
+                          <span class="badge badge-green">Yes</span>
                         } @else {
-                          <span class="badge badge-gray">Nie</span>
+                          <span class="badge badge-gray">No</span>
                         }
                       </div>
                     } @else if (isEditing(record.id, field.key)) {
@@ -83,14 +83,14 @@
                   </td>
                 }
                 <td class="td-del">
-                  <button class="del-row-btn" (click)="deleteRecord(record.id)" aria-label="Usuń rekord">✕</button>
+                  <button class="del-row-btn" (click)="deleteRecord(record.id)" aria-label="Delete record">✕</button>
                 </td>
               </tr>
             }
             @empty {
               <tr>
                 <td class="empty-row" [attr.colspan]="sortedFields().length + 2">
-                  Brak rekordów — kliknij „+ Dodaj rekord" żeby zacząć
+                  No records — click "+ Add record" to get started
                 </td>
               </tr>
             }

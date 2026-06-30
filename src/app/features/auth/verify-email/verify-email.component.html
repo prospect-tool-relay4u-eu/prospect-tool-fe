@@ -1,7 +1,7 @@
 <div class="auth-page">
 
   <div class="auth-topbar">
-    <button class="theme-toggle" (click)="theme.toggle()" aria-label="Przełącz motyw">
+    <button class="theme-toggle" (click)="theme.toggle()" aria-label="Toggle theme">
       @if (theme.theme() === 'dark') {
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
@@ -25,21 +25,21 @@
 
     <div class="form-card auth-card">
       <div class="card-header">
-        <h1 class="auth-title">Weryfikacja email</h1>
+        <h1 class="auth-title">Email verification</h1>
         <p class="auth-subtitle">
-          Wysłaliśmy 6-cyfrowy kod na adres <strong>{{ email() }}</strong>
+          We've sent a 6-digit code to <strong>{{ email() }}</strong>
         </p>
       </div>
 
       <div class="code-timer" [class.expiring]="codeTimeLeft() < 60">
-        Kod wygasa za: <strong>{{ formattedTimeLeft }}</strong>
+        Code expires in: <strong>{{ formattedTimeLeft }}</strong>
       </div>
 
       @if (error()) {
         <div class="alert alert-error">{{ error() }}</div>
       }
       @if (resendSuccess()) {
-        <div class="alert alert-success">Nowy kod został wysłany!</div>
+        <div class="alert alert-success">A new code has been sent!</div>
       }
       @if (resendError()) {
         <div class="alert alert-error">{{ resendError() }}</div>
@@ -47,7 +47,7 @@
 
       <form [formGroup]="form" (ngSubmit)="submit()" class="auth-form">
         <div class="form-group">
-          <label class="form-label" for="code">Kod weryfikacyjny</label>
+          <label class="form-label" for="code">Verification code</label>
           <input
             id="code"
             type="text"
@@ -60,7 +60,7 @@
             autocomplete="one-time-code"
           />
           @if (form.controls.code.invalid && form.controls.code.touched) {
-            <span class="form-error">Kod musi składać się z 6 cyfr.</span>
+            <span class="form-error">Code must consist of 6 digits.</span>
           }
         </div>
 
@@ -69,7 +69,7 @@
           class="btn btn-primary btn-lg btn-block"
           [disabled]="loading() || form.invalid"
         >
-          @if (loading()) { Weryfikowanie... } @else { Zweryfikuj konto }
+          @if (loading()) { Verifying... } @else { Verify account }
         </button>
       </form>
 
@@ -80,17 +80,17 @@
           [disabled]="!canResend"
         >
           @if (resendLoading()) {
-            Wysyłanie...
+            Sending...
           } @else if (resendCooldown() > 0) {
-            Wyślij ponownie ({{ resendCooldown() }}s)
+            Resend ({{ resendCooldown() }}s)
           } @else {
-            Wyślij kod ponownie
+            Resend code
           }
         </button>
       </div>
 
       <p class="auth-switch">
-        Wróć do <a routerLink="/login">logowania</a>
+        Back to <a routerLink="/login">login</a>
       </p>
     </div>
   </div>

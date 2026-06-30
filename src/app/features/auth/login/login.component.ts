@@ -40,10 +40,10 @@ export class LoginComponent implements OnInit {
       error: err => {
         this.error.set(
           err.status === 401
-            ? 'Nieprawidłowy email lub hasło.'
+            ? 'Invalid email or password.'
             : err.status === 403
-              ? err.error?.detail ?? 'Konto nie zostało zweryfikowane. Sprawdź swoją skrzynkę email.'
-              : 'Wystąpił błąd. Spróbuj ponownie.'
+              ? err.error?.detail ?? 'Account not verified. Check your email inbox.'
+              : 'An error occurred. Please try again.'
         );
         this.loading.set(false);
       },

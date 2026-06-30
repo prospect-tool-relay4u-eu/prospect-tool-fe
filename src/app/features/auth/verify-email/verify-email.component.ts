@@ -113,8 +113,8 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
         this.resendLoading.set(false);
         this.resendError.set(
           err.status === 429
-            ? 'Przekroczono limit wysyłania kodów. Poczekaj godzinę.'
-            : 'Nie udało się wysłać kodu. Spróbuj ponownie.'
+            ? 'Code sending limit exceeded. Please wait an hour.'
+            : 'Failed to send code. Please try again.'
         );
       },
     });
@@ -123,11 +123,11 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
   private mapVerifyError(status: number, detail?: string): string {
     switch (status) {
       case 400:
-        return detail ?? 'Nieprawidłowy lub wygasły kod weryfikacyjny.';
+        return detail ?? 'Invalid or expired verification code.';
       case 423:
-        return 'Konto zablokowane po zbyt wielu próbach. Poproś o nowy kod.';
+        return 'Account locked after too many attempts. Please request a new code.';
       default:
-        return 'Wystąpił błąd. Spróbuj ponownie.';
+        return 'An error occurred. Please try again.';
     }
   }
 }

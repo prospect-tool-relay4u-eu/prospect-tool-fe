@@ -10,21 +10,21 @@
       </div>
 
       <div class="hero">
-        <h1 class="hero-title">Twój Excel<br>do prospectingu</h1>
+        <h1 class="hero-title">Your data,<br>your columns</h1>
         <p class="hero-desc">
-          Każdy projekt ma własną strukturę pól. Definiujesz kolumny, dodajesz rekordy i śledzisz kto odpisał — bez Excela.
+          Whether you're tracking clients, candidates, leads, or anything else — define your own fields, add records, and keep everything organized. No spreadsheets needed.
         </p>
       </div>
 
       <div class="cta-group">
         @if (auth.isLoggedIn()) {
-          <a routerLink="/projects" class="btn btn-light btn-lg btn-block">Przejdź do projektów</a>
+          <a routerLink="/projects" class="btn btn-light btn-lg btn-block">Go to projects</a>
         } @else {
           <a routerLink="/register" class="btn btn-light btn-lg btn-block">
-            Zarejestruj się za darmo
+            Sign up for free
           </a>
           <a routerLink="/login" class="btn btn-ghost-light btn-lg btn-block">
-            Mam już konto
+            I already have an account
           </a>
         }
       </div>
@@ -32,21 +32,21 @@
       <ul class="features">
         <li class="feature-item">
           <span class="check-icon">✓</span>
-          <span>Własna struktura pól w każdym projekcie</span>
+          <span>Custom field structure per project</span>
         </li>
         <li class="feature-item">
           <span class="check-icon">✓</span>
-          <span>Tekst, liczby, wartości Tak/Nie</span>
+          <span>Text, numbers, Yes/No values</span>
         </li>
         <li class="feature-item">
           <span class="check-icon">✓</span>
-          <span>Edycja inline — jak w arkuszu kalkulacyjnym</span>
+          <span>Inline editing — just like a spreadsheet</span>
         </li>
       </ul>
 
     </div>
 
-    <button class="theme-btn" (click)="theme.toggle()" aria-label="Przełącz motyw">
+    <button class="theme-btn" (click)="theme.toggle()" aria-label="Toggle theme">
       @if (theme.theme() === 'dark') {
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
@@ -67,50 +67,50 @@
     <div class="panel-right-inner">
 
       <div class="preview-header">
-        <h2 class="preview-title">Podgląd aplikacji</h2>
-        <p class="preview-subtitle">Każdy projekt = własna struktura danych</p>
+        <h2 class="preview-title">App preview</h2>
+        <p class="preview-subtitle">Each project = its own data structure</p>
       </div>
 
       <!-- Project 1 preview -->
       <div class="project-preview">
         <div class="proj-chip">
           <div class="proj-chip-left">
-            <div class="proj-letter">K</div>
+            <div class="proj-letter">B</div>
             <div>
-              <div class="proj-name">Kampania B2B Q3</div>
-              <div class="proj-meta">5 pól · 24 rekordy</div>
+              <div class="proj-name">B2B Campaign Q3</div>
+              <div class="proj-meta">5 fields · 24 records</div>
             </div>
           </div>
-          <span class="badge badge-green">aktywny</span>
+          <span class="badge badge-green">active</span>
         </div>
 
         <div class="mini-table-wrap">
           <table class="mini-table">
             <thead>
               <tr>
-                <th>Imię i nazwisko</th>
-                <th>Firma</th>
-                <th>Odpisał?</th>
-                <th>Treść odpowiedzi</th>
+                <th>Full name</th>
+                <th>Company</th>
+                <th>Replied?</th>
+                <th>Response</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>Anna Kowalska</td>
-                <td>TechCorp</td>
-                <td><span class="badge badge-green">Tak</span></td>
-                <td class="cell-truncate">Tak, chętnie porozmawiamy...</td>
+                <td>Alice Johnson</td>
+                <td>Acme Corp</td>
+                <td><span class="badge badge-green">Yes</span></td>
+                <td class="cell-truncate">Sure, let's talk...</td>
               </tr>
               <tr>
-                <td>Marek Nowak</td>
-                <td>StartupXYZ</td>
-                <td><span class="badge badge-gray">Nie</span></td>
+                <td>Bob Smith</td>
+                <td>TechCo</td>
+                <td><span class="badge badge-gray">No</span></td>
                 <td class="cell-muted">—</td>
               </tr>
               <tr>
-                <td>Karolina W.</td>
+                <td>Carol W.</td>
                 <td>Agency Pro</td>
-                <td><span class="badge badge-amber">Czeka</span></td>
+                <td><span class="badge badge-amber">Pending</span></td>
                 <td class="cell-muted">—</td>
               </tr>
             </tbody>
@@ -121,7 +121,7 @@
       <!-- Divider -->
       <div class="schema-divider">
         <span class="sd-line"></span>
-        <span class="sd-text">Inny projekt — inne pola</span>
+        <span class="sd-text">Different project — different fields</span>
         <span class="sd-line"></span>
       </div>
 
@@ -131,35 +131,35 @@
           <div class="proj-chip-left">
             <div class="proj-letter proj-letter-blue">I</div>
             <div>
-              <div class="proj-name">Inwestorzy 2025</div>
-              <div class="proj-meta">4 pola · 8 rekordów</div>
+              <div class="proj-name">Investors 2025</div>
+              <div class="proj-meta">4 fields · 8 records</div>
             </div>
           </div>
-          <span class="badge badge-blue">nowy</span>
+          <span class="badge badge-blue">new</span>
         </div>
 
         <div class="mini-table-wrap">
           <table class="mini-table">
             <thead>
               <tr>
-                <th>Imię</th>
-                <th>Kwota (PLN)</th>
-                <th>Zainteresowany?</th>
-                <th>Następny krok</th>
+                <th>Name</th>
+                <th>Amount (USD)</th>
+                <th>Interested?</th>
+                <th>Next step</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>Piotr Wiśniewski</td>
+                <td>Peter Wilson</td>
                 <td>50 000</td>
-                <td><span class="badge badge-green">Tak</span></td>
-                <td>Podpisanie umowy</td>
+                <td><span class="badge badge-green">Yes</span></td>
+                <td>Sign contract</td>
               </tr>
               <tr>
-                <td>Ewa Dąbrowska</td>
+                <td>Eve Brown</td>
                 <td>20 000</td>
-                <td><span class="badge badge-amber">Może</span></td>
-                <td>Follow-up w czwartek</td>
+                <td><span class="badge badge-amber">Maybe</span></td>
+                <td>Follow-up Thursday</td>
               </tr>
             </tbody>
           </table>
