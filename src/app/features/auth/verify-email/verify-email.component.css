@@ -1,0 +1,146 @@
+.brand-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  object-fit: cover;
+  display: block;
+}
+
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-bg);
+}
+
+.auth-topbar {
+  display: flex;
+  justify-content: flex-end;
+  padding: 14px 20px;
+}
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition:
+    background-color var(--transition),
+    color var(--transition);
+}
+
+.theme-toggle:hover {
+  background-color: var(--color-surface-alt);
+  color: var(--color-text);
+}
+
+.auth-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px 48px;
+  gap: 24px;
+}
+
+.auth-brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  text-decoration: none;
+  color: var(--color-text);
+}
+
+.auth-brand-name {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.auth-title {
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+}
+
+.auth-subtitle {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.code-timer {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+.code-timer.expiring {
+  color: #e53e3e;
+  font-weight: 600;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.code-input {
+  font-size: 24px;
+  letter-spacing: 6px;
+  text-align: center;
+  font-family: monospace;
+}
+
+.resend-section {
+  text-align: center;
+}
+
+.btn-link {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 4px;
+  text-decoration: underline;
+}
+
+.btn-link:disabled {
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+  text-decoration: none;
+}
+
+.auth-switch {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.auth-switch a {
+  color: var(--color-primary);
+  font-weight: 500;
+}

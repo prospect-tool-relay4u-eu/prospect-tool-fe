@@ -63,6 +63,14 @@ export class AuthService {
     });
   }
 
+  verifyEmail(email: string, code: string): Observable<void> {
+    return this.http.post<void>(`${environment.apiBase}/auth/verify-email`, { email, code });
+  }
+
+  resendVerification(email: string): Observable<void> {
+    return this.http.post<void>(`${environment.apiBase}/auth/resend-verification`, { email });
+  }
+
   logout(): void {
     this._token.set(null);
     sessionStorage.removeItem(TOKEN_KEY);

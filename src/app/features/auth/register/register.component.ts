@@ -53,7 +53,10 @@ export class RegisterComponent {
     this.auth.register(name!, email!, password!, confirmPassword!).subscribe({
       next: () => {
         this.success.set(true);
-        setTimeout(() => this.router.navigate(['/login']), 1500);
+        setTimeout(
+          () => this.router.navigate(['/verify-email'], { queryParams: { email: encodeURIComponent(email!) } }),
+          1500
+        );
       },
       error: err => {
         this.error.set(

@@ -34,7 +34,7 @@
         <div class="alert alert-error">{{ error() }}</div>
       }
       @if (success()) {
-        <div class="alert alert-success">Konto zostało utworzone! Przekierowuję do logowania...</div>
+        <div class="alert alert-success">Konto zostało utworzone! Wysłaliśmy kod weryfikacyjny na Twój email.</div>
       }
 
       <form [formGroup]="form" (ngSubmit)="submit()" class="auth-form">

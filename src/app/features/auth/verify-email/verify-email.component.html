@@ -18,7 +18,6 @@
   </div>
 
   <div class="auth-container">
-
     <a routerLink="/" class="auth-brand">
       <img class="brand-dot" src="relay4u.png" alt="Relay4U">
       <span class="auth-brand-name">Relay4U</span>
@@ -26,60 +25,73 @@
 
     <div class="form-card auth-card">
       <div class="card-header">
-        <h1 class="auth-title">Zaloguj się</h1>
-        <p class="auth-subtitle">Witaj ponownie — zaloguj się na swoje konto</p>
+        <h1 class="auth-title">Weryfikacja email</h1>
+        <p class="auth-subtitle">
+          Wysłaliśmy 6-cyfrowy kod na adres <strong>{{ email() }}</strong>
+        </p>
       </div>
 
-      @if (verified()) {
-        <div class="alert alert-success">Konto zweryfikowane! Możesz się teraz zalogować.</div>
-      }
+      <div class="code-timer" [class.expiring]="codeTimeLeft() < 60">
+        Kod wygasa za: <strong>{{ formattedTimeLeft }}</strong>
+      </div>
+
       @if (error()) {
         <div class="alert alert-error">{{ error() }}</div>
+      }
+      @if (resendSuccess()) {
+        <div class="alert alert-success">Nowy kod został wysłany!</div>
+      }
+      @if (resendError()) {
+        <div class="alert alert-error">{{ resendError() }}</div>
       }
 
       <form [formGroup]="form" (ngSubmit)="submit()" class="auth-form">
         <div class="form-group">
-          <label class="form-label" for="email">Email</label>
+          <label class="form-label" for="code">Kod weryfikacyjny</label>
           <input
-            id="email"
-            type="email"
-            class="form-input"
-            [class.error]="form.controls.email.invalid && form.controls.email.touched"
-            formControlName="email"
-            placeholder="jan@firma.pl"
-            autocomplete="email"
+            id="code"
+            type="text"
+            inputmode="numeric"
+            maxlength="6"
+            class="form-input code-input"
+            [class.error]="form.controls.code.invalid && form.controls.code.touched"
+            formControlName="code"
+            placeholder="000000"
+            autocomplete="one-time-code"
           />
-          @if (form.controls.email.invalid && form.controls.email.touched) {
-            <span class="form-error">Podaj prawidłowy adres email.</span>
+          @if (form.controls.code.invalid && form.controls.code.touched) {
+            <span class="form-error">Kod musi składać się z 6 cyfr.</span>
           }
         </div>
 
-        <div class="form-group">
-          <label class="form-label" for="password">Hasło</label>
-          <input
-            id="password"
-            type="password"
-            class="form-input"
-            [class.error]="form.controls.password.invalid && form.controls.password.touched"
-            formControlName="password"
-            placeholder="••••••••"
-            autocomplete="current-password"
-          />
-        </div>
-
-        <button type="submit" class="btn btn-primary btn-lg btn-block" [disabled]="loading()">
-          @if (loading()) {
-            Logowanie...
-          } @else {
-            Zaloguj się
-          }
+        <button
+          type="submit"
+          class="btn btn-primary btn-lg btn-block"
+          [disabled]="loading() || form.invalid"
+        >
+          @if (loading()) { Weryfikowanie... } @else { Zweryfikuj konto }
         </button>
       </form>
 
+      <div class="resend-section">
+        <button
+          class="btn-link"
+          (click)="resend()"
+          [disabled]="!canResend"
+        >
+          @if (resendLoading()) {
+            Wysyłanie...
+          } @else if (resendCooldown() > 0) {
+            Wyślij ponownie ({{ resendCooldown() }}s)
+          } @else {
+            Wyślij kod ponownie
+          }
+        </button>
+      </div>
+
       <p class="auth-switch">
-        Nie masz konta? <a routerLink="/register">Zarejestruj się</a>
+        Wróć do <a routerLink="/login">logowania</a>
       </p>
     </div>
-
   </div>
 </div>

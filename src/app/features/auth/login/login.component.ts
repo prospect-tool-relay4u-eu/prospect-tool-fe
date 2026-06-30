@@ -1,6 +1,6 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { ThemeService } from '../../../core/services/theme.service';
 
@@ -10,9 +10,10 @@ import { ThemeService } from '../../../core/services/theme.service';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   readonly theme = inject(ThemeService);
   private readonly fb = inject(FormBuilder);
 
@@ -23,6 +24,11 @@ export class LoginComponent {
 
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
+  readonly verified = signal(false);
+
+  ngOnInit(): void {
+    this.verified.set(this.route.snapshot.queryParamMap.get('verified') === 'true');
+  }
 
   submit(): void {
     if (this.form.invalid || this.loading()) return;
@@ -35,7 +41,9 @@ export class LoginComponent {
         this.error.set(
           err.status === 401
             ? 'Nieprawidłowy email lub hasło.'
-            : 'Wystąpił błąd. Spróbuj ponownie.'
+            : err.status === 403
+              ? err.error?.detail ?? 'Konto nie zostało zweryfikowane. Sprawdź swoją skrzynkę email.'
+              : 'Wystąpił błąd. Spróbuj ponownie.'
         );
         this.loading.set(false);
       },
