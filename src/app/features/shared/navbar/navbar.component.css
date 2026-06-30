@@ -11,6 +11,14 @@
   z-index: 100;
 }
 
+.brand-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  object-fit: cover;
+  display: block;
+}
+
 .brand {
   display: flex;
   align-items: center;
