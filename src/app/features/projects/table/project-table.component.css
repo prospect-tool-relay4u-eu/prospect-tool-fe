@@ -1,0 +1,264 @@
+.table-page {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 56px);
+  overflow: hidden;
+  background-color: var(--color-bg);
+}
+
+/* ── Toolbar ──────────────────────────────── */
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  gap: 12px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+.toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.breadcrumb-link {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  text-decoration: none;
+}
+
+.breadcrumb-link:hover {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.breadcrumb-sep {
+  font-size: 13px;
+  color: var(--color-border);
+}
+
+.breadcrumb-current {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── No fields state ──────────────────────── */
+
+.no-fields {
+  padding: 48px 24px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--color-text-muted);
+}
+
+.no-fields a {
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+/* ── Table ────────────────────────────────── */
+
+.table-wrapper {
+  overflow: auto;
+  flex: 1;
+}
+
+table {
+  border-collapse: collapse;
+  min-width: max-content;
+  width: 100%;
+}
+
+thead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+thead tr {
+  background-color: var(--color-surface-alt);
+}
+
+th {
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+  border-right: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+
+.th-inner {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.th-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.th-type {
+  font-size: 10px;
+  color: var(--color-text-muted);
+  background-color: var(--color-border);
+  padding: 1px 5px;
+  border-radius: 4px;
+  opacity: 0.7;
+}
+
+.th-num,
+.th-del {
+  width: 40px;
+  text-align: center;
+}
+
+tbody tr {
+  border-bottom: 1px solid var(--color-border);
+  transition: background-color var(--transition);
+}
+
+tbody tr:hover {
+  background-color: var(--color-surface);
+}
+
+td {
+  padding: 0;
+  border-right: 1px solid var(--color-border);
+  vertical-align: middle;
+  height: 38px;
+}
+
+.td-num {
+  text-align: center;
+  font-size: 11px;
+  color: var(--color-text-muted);
+  padding: 0 8px;
+  width: 40px;
+  flex-shrink: 0;
+}
+
+/* ── Cells ────────────────────────────────── */
+
+.cell-display {
+  padding: 8px 12px;
+  min-width: 140px;
+  max-width: 260px;
+  font-size: 13px;
+  color: var(--color-text);
+  cursor: text;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  transition: background-color var(--transition);
+}
+
+.cell-display:hover {
+  background-color: var(--color-primary-light);
+}
+
+.cell-empty {
+  color: var(--color-border);
+}
+
+.cell-input {
+  width: 100%;
+  height: 38px;
+  padding: 8px 12px;
+  border: none;
+  border: 2px solid var(--color-primary);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+  min-width: 140px;
+  box-sizing: border-box;
+}
+
+.cell-bool {
+  padding: 0 12px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color var(--transition);
+}
+
+.cell-bool:hover {
+  background-color: var(--color-primary-light);
+}
+
+/* ── Delete button ────────────────────────── */
+
+.td-del {
+  width: 36px;
+  text-align: center;
+  border-right: none;
+}
+
+.del-row-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  font-size: 10px;
+  color: var(--color-text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  opacity: 0;
+  transition:
+    opacity var(--transition),
+    background-color var(--transition),
+    color var(--transition);
+}
+
+tbody tr:hover .del-row-btn {
+  opacity: 1;
+}
+
+.del-row-btn:hover {
+  background-color: var(--color-error-bg);
+  color: var(--color-error);
+}
+
+/* ── Empty row ────────────────────────────── */
+
+.empty-row {
+  text-align: center;
+  padding: 48px 24px;
+  font-size: 13px;
+  color: var(--color-text-muted);
+  background-color: var(--color-bg);
+}
+
+/* ── Footer ───────────────────────────────── */
+
+.table-footer {
+  padding: 10px 20px;
+  font-size: 12px;
+  color: var(--color-text-muted);
+  border-top: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  flex-shrink: 0;
+}

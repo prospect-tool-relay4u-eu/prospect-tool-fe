@@ -1,0 +1,172 @@
+<div class="landing">
+
+  <!-- LEFT PANEL (2/8) -->
+  <aside class="panel-left">
+    <div class="panel-inner">
+
+      <div class="logo">
+        <span class="logo-icon">R</span>
+        <span class="logo-name">Relay4U</span>
+      </div>
+
+      <div class="hero">
+        <h1 class="hero-title">Twój Excel<br>do prospectingu</h1>
+        <p class="hero-desc">
+          Każdy projekt ma własną strukturę pól. Definiujesz kolumny, dodajesz rekordy i śledzisz kto odpisał — bez Excela.
+        </p>
+      </div>
+
+      <div class="cta-group">
+        @if (auth.isLoggedIn()) {
+          <a routerLink="/projects" class="btn btn-light btn-lg btn-block">Przejdź do projektów</a>
+        } @else {
+          <a routerLink="/register" class="btn btn-light btn-lg btn-block">
+            Zarejestruj się za darmo
+          </a>
+          <a routerLink="/login" class="btn btn-ghost-light btn-lg btn-block">
+            Mam już konto
+          </a>
+        }
+      </div>
+
+      <ul class="features">
+        <li class="feature-item">
+          <span class="check-icon">✓</span>
+          <span>Własna struktura pól w każdym projekcie</span>
+        </li>
+        <li class="feature-item">
+          <span class="check-icon">✓</span>
+          <span>Tekst, liczby, wartości Tak/Nie</span>
+        </li>
+        <li class="feature-item">
+          <span class="check-icon">✓</span>
+          <span>Edycja inline — jak w arkuszu kalkulacyjnym</span>
+        </li>
+      </ul>
+
+    </div>
+
+    <button class="theme-btn" (click)="theme.toggle()" aria-label="Przełącz motyw">
+      @if (theme.theme() === 'dark') {
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+      } @else {
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      }
+    </button>
+  </aside>
+
+  <!-- RIGHT PANEL (6/8) -->
+  <main class="panel-right">
+    <div class="panel-right-inner">
+
+      <div class="preview-header">
+        <h2 class="preview-title">Podgląd aplikacji</h2>
+        <p class="preview-subtitle">Każdy projekt = własna struktura danych</p>
+      </div>
+
+      <!-- Project 1 preview -->
+      <div class="project-preview">
+        <div class="proj-chip">
+          <div class="proj-chip-left">
+            <div class="proj-letter">K</div>
+            <div>
+              <div class="proj-name">Kampania B2B Q3</div>
+              <div class="proj-meta">5 pól · 24 rekordy</div>
+            </div>
+          </div>
+          <span class="badge badge-green">aktywny</span>
+        </div>
+
+        <div class="mini-table-wrap">
+          <table class="mini-table">
+            <thead>
+              <tr>
+                <th>Imię i nazwisko</th>
+                <th>Firma</th>
+                <th>Odpisał?</th>
+                <th>Treść odpowiedzi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Anna Kowalska</td>
+                <td>TechCorp</td>
+                <td><span class="badge badge-green">Tak</span></td>
+                <td class="cell-truncate">Tak, chętnie porozmawiamy...</td>
+              </tr>
+              <tr>
+                <td>Marek Nowak</td>
+                <td>StartupXYZ</td>
+                <td><span class="badge badge-gray">Nie</span></td>
+                <td class="cell-muted">—</td>
+              </tr>
+              <tr>
+                <td>Karolina W.</td>
+                <td>Agency Pro</td>
+                <td><span class="badge badge-amber">Czeka</span></td>
+                <td class="cell-muted">—</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div class="schema-divider">
+        <span class="sd-line"></span>
+        <span class="sd-text">Inny projekt — inne pola</span>
+        <span class="sd-line"></span>
+      </div>
+
+      <!-- Project 2 preview -->
+      <div class="project-preview">
+        <div class="proj-chip">
+          <div class="proj-chip-left">
+            <div class="proj-letter proj-letter-blue">I</div>
+            <div>
+              <div class="proj-name">Inwestorzy 2025</div>
+              <div class="proj-meta">4 pola · 8 rekordów</div>
+            </div>
+          </div>
+          <span class="badge badge-blue">nowy</span>
+        </div>
+
+        <div class="mini-table-wrap">
+          <table class="mini-table">
+            <thead>
+              <tr>
+                <th>Imię</th>
+                <th>Kwota (PLN)</th>
+                <th>Zainteresowany?</th>
+                <th>Następny krok</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Piotr Wiśniewski</td>
+                <td>50 000</td>
+                <td><span class="badge badge-green">Tak</span></td>
+                <td>Podpisanie umowy</td>
+              </tr>
+              <tr>
+                <td>Ewa Dąbrowska</td>
+                <td>20 000</td>
+                <td><span class="badge badge-amber">Może</span></td>
+                <td>Follow-up w czwartek</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+</div>

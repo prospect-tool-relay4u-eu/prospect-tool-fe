@@ -1,0 +1,39 @@
+<app-navbar />
+
+<main class="dashboard">
+  <div class="dashboard-inner">
+
+    <div class="welcome-card">
+      <div class="welcome-icon">👋</div>
+      <h1 class="welcome-title">Witaj, {{ auth.userEmail() }}!</h1>
+      <p class="welcome-desc">
+        Twój panel prospectingowy jest gotowy. Tutaj wkrótce pojawią się Twoje kontakty,
+        historia rozmów i śledzenie statusów odpowiedzi.
+      </p>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">👥</div>
+        <div class="stat-label">Kontakty</div>
+        <div class="stat-value">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">💬</div>
+        <div class="stat-label">Odpowiedzi</div>
+        <div class="stat-value">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📊</div>
+        <div class="stat-label">Wskaźnik</div>
+        <div class="stat-value">—</div>
+      </div>
+    </div>
+
+    <div class="coming-soon-banner">
+      <span class="cs-badge">Wkrótce</span>
+      <p>Zarządzanie kontaktami, śledzenie statusów odpowiedzi i analizy kampanii prospectingowych.</p>
+    </div>
+
+  </div>
+</main>

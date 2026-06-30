@@ -1,0 +1,107 @@
+<app-navbar />
+
+@if (project()) {
+  <div class="table-page">
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <a routerLink="/projects" class="breadcrumb-link">Projekty</a>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-current">{{ project()!.name }}</span>
+      </div>
+      <div class="toolbar-right">
+        <a [routerLink]="['/projects', projectId, 'settings']" class="btn btn-ghost">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          Zarządzaj polami
+        </a>
+        <button class="btn btn-primary" (click)="addRecord()">+ Dodaj rekord</button>
+      </div>
+    </div>
+
+    <!-- No fields state -->
+    @if (sortedFields().length === 0) {
+      <div class="no-fields">
+        <p>
+          Projekt nie ma jeszcze żadnych pól.
+          <a [routerLink]="['/projects', projectId, 'settings']">Dodaj pola</a> żeby zacząć.
+        </p>
+      </div>
+    } @else {
+
+      <!-- Table -->
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th class="th-num">#</th>
+              @for (field of sortedFields(); track field.id) {
+                <th>
+                  <div class="th-inner">
+                    <span class="th-label">{{ field.label }}</span>
+                    <span class="th-type">{{ typeLabel(field.type) }}</span>
+                  </div>
+                </th>
+              }
+              <th class="th-del"></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (record of records(); track record.id; let i = $index) {
+              <tr>
+                <td class="td-num">{{ i + 1 }}</td>
+                @for (field of sortedFields(); track field.id) {
+                  <td>
+                    @if (field.type === 'BOOLEAN') {
+                      <div class="cell-bool" (click)="toggleBoolean(record.id, field.key)">
+                        @if (getBoolValue(record, field.key)) {
+                          <span class="badge badge-green">Tak</span>
+                        } @else {
+                          <span class="badge badge-gray">Nie</span>
+                        }
+                      </div>
+                    } @else if (isEditing(record.id, field.key)) {
+                      <input
+                        class="cell-input"
+                        [type]="field.type === 'INTEGER' || field.type === 'NUMBER' ? 'number' : 'text'"
+                        [value]="getCellValue(record, field)"
+                        [attr.step]="field.type === 'INTEGER' ? '1' : null"
+                        (blur)="commitEdit($event, record.id, field)"
+                        (keydown.enter)="commitEdit($event, record.id, field)"
+                        (keydown.escape)="cancelEdit()"
+                        appAutoFocus
+                      />
+                    } @else {
+                      <div class="cell-display" (click)="startEdit(record.id, field.key)">
+                        @if (displayValue(record, field)) {
+                          {{ displayValue(record, field) }}
+                        } @else {
+                          <span class="cell-empty">—</span>
+                        }
+                      </div>
+                    }
+                  </td>
+                }
+                <td class="td-del">
+                  <button class="del-row-btn" (click)="deleteRecord(record.id)" aria-label="Usuń rekord">✕</button>
+                </td>
+              </tr>
+            }
+            @empty {
+              <tr>
+                <td class="empty-row" [attr.colspan]="sortedFields().length + 2">
+                  Brak rekordów — kliknij „+ Dodaj rekord" żeby zacząć
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-footer">
+        {{ recordCountLabel(records().length) }}
+      </div>
+    }
+
+  </div>
+}

@@ -1,0 +1,107 @@
+<app-navbar />
+
+<div class="projects-page">
+
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Projekty</h1>
+      <p class="page-subtitle">Każdy projekt ma własną strukturę pól</p>
+    </div>
+    @if (!showNewForm()) {
+      <button class="btn btn-primary" (click)="openNewForm()">+ Nowy projekt</button>
+    }
+  </div>
+
+  @if (showNewForm()) {
+    <div class="new-project-panel form-card">
+      <h2 class="panel-title">Nowy projekt</h2>
+      <div class="panel-fields">
+        <div class="form-group">
+          <label class="form-label" for="proj-name">Nazwa projektu</label>
+          <input
+            id="proj-name"
+            class="form-input"
+            [value]="newName()"
+            (input)="newName.set($any($event.target).value)"
+            placeholder="np. Kampania B2B Q3"
+            (keydown.enter)="createProject()"
+            autofocus
+          />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="proj-desc">Opis (opcjonalny)</label>
+          <input
+            id="proj-desc"
+            class="form-input"
+            [value]="newDesc()"
+            (input)="newDesc.set($any($event.target).value)"
+            placeholder="Krótki opis projektu"
+          />
+        </div>
+      </div>
+      <div class="panel-actions">
+        <button class="btn btn-ghost" (click)="cancelNewForm()">Anuluj</button>
+        <button class="btn btn-primary" (click)="createProject()" [disabled]="!newName().trim()">
+          Utwórz projekt
+        </button>
+      </div>
+    </div>
+  }
+
+  @if (projects().length === 0 && !showNewForm()) {
+    <div class="empty-state">
+      <div class="empty-icon">📋</div>
+      <h3 class="empty-title">Brak projektów</h3>
+      <p class="empty-desc">
+        Stwórz pierwszy projekt, żeby zacząć śledzić swój prospecting.
+        Po utworzeniu możesz dodać własne pola w ustawieniach projektu.
+      </p>
+      <button class="btn btn-primary btn-lg" (click)="openNewForm()">
+        + Stwórz pierwszy projekt
+      </button>
+    </div>
+  }
+
+  @if (projects().length > 0) {
+    <div class="projects-grid">
+      @for (project of projects(); track project.id) {
+        <div class="project-card" (click)="navigateTo(project.id)">
+          <div class="project-card-top">
+            <div class="project-letter">{{ project.name[0].toUpperCase() }}</div>
+            <div class="project-info">
+              <div class="project-name">{{ project.name }}</div>
+              @if (project.description) {
+                <div class="project-desc">{{ project.description }}</div>
+              }
+            </div>
+          </div>
+
+          <div class="project-meta-row">
+            <span class="meta-chip">{{ project.fieldCount }} pól</span>
+            <span class="meta-sep">·</span>
+            <span class="meta-chip">{{ project.recordCount }} rekordów</span>
+          </div>
+
+          <div class="project-footer">
+            <span class="project-date">{{ formatDate(project.createdAt) }}</span>
+
+            @if (deleteConfirmId() === project.id) {
+              <div class="delete-confirm" (click)="$event.stopPropagation()">
+                <span class="delete-question">Usunąć?</span>
+                <button class="btn btn-ghost btn-xs" (click)="cancelDelete($event)">Nie</button>
+                <button class="btn btn-danger btn-xs" (click)="deleteProject(project.id, $event)">Tak, usuń</button>
+              </div>
+            } @else {
+              <button
+                class="delete-btn"
+                (click)="confirmDelete(project.id, $event)"
+                aria-label="Usuń projekt"
+              >✕</button>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+</div>

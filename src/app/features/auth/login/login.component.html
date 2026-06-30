@@ -1,0 +1,82 @@
+<div class="auth-page">
+
+  <div class="auth-topbar">
+    <button class="theme-toggle" (click)="theme.toggle()" aria-label="Przełącz motyw">
+      @if (theme.theme() === 'dark') {
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+      } @else {
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      }
+    </button>
+  </div>
+
+  <div class="auth-container">
+
+    <a routerLink="/" class="auth-brand">
+      <span class="brand-dot" style="width: 28px; height: 28px;"></span>
+      <span class="auth-brand-name">Relay4U</span>
+    </a>
+
+    <div class="form-card auth-card">
+      <div class="card-header">
+        <h1 class="auth-title">Zaloguj się</h1>
+        <p class="auth-subtitle">Witaj ponownie — zaloguj się na swoje konto</p>
+      </div>
+
+      @if (error()) {
+        <div class="alert alert-error">{{ error() }}</div>
+      }
+
+      <form [formGroup]="form" (ngSubmit)="submit()" class="auth-form">
+        <div class="form-group">
+          <label class="form-label" for="email">Email</label>
+          <input
+            id="email"
+            type="email"
+            class="form-input"
+            [class.error]="form.controls.email.invalid && form.controls.email.touched"
+            formControlName="email"
+            placeholder="jan@firma.pl"
+            autocomplete="email"
+          />
+          @if (form.controls.email.invalid && form.controls.email.touched) {
+            <span class="form-error">Podaj prawidłowy adres email.</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Hasło</label>
+          <input
+            id="password"
+            type="password"
+            class="form-input"
+            [class.error]="form.controls.password.invalid && form.controls.password.touched"
+            formControlName="password"
+            placeholder="••••••••"
+            autocomplete="current-password"
+          />
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg btn-block" [disabled]="loading()">
+          @if (loading()) {
+            Logowanie...
+          } @else {
+            Zaloguj się
+          }
+        </button>
+      </form>
+
+      <p class="auth-switch">
+        Nie masz konta? <a routerLink="/register">Zarejestruj się</a>
+      </p>
+    </div>
+
+  </div>
+</div>
