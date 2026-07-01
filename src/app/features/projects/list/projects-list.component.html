@@ -25,7 +25,6 @@
             (input)="newName.set($any($event.target).value)"
             placeholder="e.g. B2B Campaign Q3"
             (keydown.enter)="createProject()"
-            autofocus
           />
         </div>
         <div class="form-group">
@@ -65,7 +64,13 @@
   @if (projects().length > 0) {
     <div class="projects-grid">
       @for (project of projects(); track project.id) {
-        <div class="project-card" (click)="navigateTo(project.id)">
+        <div
+          class="project-card"
+          role="button"
+          tabindex="0"
+          (click)="navigateTo(project.id)"
+          (keydown.enter)="navigateTo(project.id)"
+        >
           <div class="project-card-top">
             <div class="project-letter">{{ project.name[0].toUpperCase() }}</div>
             <div class="project-info">
@@ -86,7 +91,7 @@
             <span class="project-date">{{ formatDate(project.createdAt) }}</span>
 
             @if (deleteConfirmId() === project.id) {
-              <div class="delete-confirm" (click)="$event.stopPropagation()">
+              <div class="delete-confirm">
                 <span class="delete-question">Delete?</span>
                 <button class="btn btn-ghost btn-xs" (click)="cancelDelete($event)">No</button>
                 <button class="btn btn-danger btn-xs" (click)="deleteProject(project.id, $event)">Yes, delete</button>
