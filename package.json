@@ -9,7 +9,9 @@
     "test": "ng test",
     "build:staging": "ng build --configuration staging",
     "build:prod": "ng build --configuration production",
-    "serve:staging": "ng serve --configuration staging"
+    "build:sandbox": "ng build --configuration sandbox",
+    "serve:staging": "ng serve --configuration staging",
+    "lint": "ng lint"
   },
   "private": true,
   "packageManager": "npm@11.17.0",
@@ -27,9 +29,13 @@
     "@angular/build": "^22.0.4",
     "@angular/cli": "^22.0.4",
     "@angular/compiler-cli": "^22.0.0",
+    "@eslint/js": "^10.0.1",
+    "angular-eslint": "22.0.0",
+    "eslint": "^10.3.0",
     "jsdom": "^28.0.0",
     "prettier": "^3.8.1",
     "typescript": "~6.0.2",
+    "typescript-eslint": "8.60.1",
     "vitest": "^4.0.8"
   }
 }

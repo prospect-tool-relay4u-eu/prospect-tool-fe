@@ -26,13 +26,13 @@
       @if (editingName()) {
         <div class="edit-name-form">
           <div class="form-group">
-            <label class="form-label">Project name</label>
-            <input class="form-input" [value]="nameValue()" (input)="nameValue.set($any($event.target).value)"
+            <label class="form-label" for="settings-name">Project name</label>
+            <input id="settings-name" class="form-input" [value]="nameValue()" (input)="nameValue.set($any($event.target).value)"
                    placeholder="Project name" (keydown.enter)="saveName()" />
           </div>
           <div class="form-group">
-            <label class="form-label">Description</label>
-            <input class="form-input" [value]="descValue()" (input)="descValue.set($any($event.target).value)"
+            <label class="form-label" for="settings-desc">Description</label>
+            <input id="settings-desc" class="form-input" [value]="descValue()" (input)="descValue.set($any($event.target).value)"
                    placeholder="Optional description" />
           </div>
           <div class="edit-actions">
@@ -103,8 +103,9 @@
         }
         <div class="add-field-row">
           <div class="form-group flex-1">
-            <label class="form-label">Field name</label>
+            <label class="form-label" for="new-field-label">Field name</label>
             <input
+              id="new-field-label"
               class="form-input"
               [value]="newFieldLabel()"
               (input)="newFieldLabel.set($any($event.target).value)"
@@ -113,15 +114,15 @@
             />
           </div>
           <div class="form-group">
-            <label class="form-label">Type</label>
-            <select class="form-input form-select" [value]="newFieldType()" (change)="newFieldType.set($any($event.target).value)">
+            <label class="form-label" for="new-field-type">Type</label>
+            <select id="new-field-type" class="form-input form-select" [value]="newFieldType()" (change)="newFieldType.set($any($event.target).value)">
               @for (type of fieldTypes; track type) {
                 <option [value]="type">{{ typeDisplay[type] }}</option>
               }
             </select>
           </div>
           <div class="form-group form-group-btn">
-            <label class="form-label">&nbsp;</label>
+            <span class="form-label" aria-hidden="true">&nbsp;</span>
             <button class="btn btn-primary" (click)="addField()" [disabled]="!newFieldLabel().trim()">
               + Add field
             </button>

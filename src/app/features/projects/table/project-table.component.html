@@ -53,7 +53,13 @@
                 @for (field of sortedFields(); track field.id) {
                   <td>
                     @if (field.type === 'BOOLEAN') {
-                      <div class="cell-bool" (click)="toggleBoolean(record.id, field.key)">
+                      <div
+                        class="cell-bool"
+                        role="button"
+                        tabindex="0"
+                        (click)="toggleBoolean(record.id, field.key)"
+                        (keydown.enter)="toggleBoolean(record.id, field.key)"
+                      >
                         @if (getBoolValue(record, field.key)) {
                           <span class="badge badge-green">Yes</span>
                         } @else {
@@ -72,7 +78,13 @@
                         appAutoFocus
                       />
                     } @else {
-                      <div class="cell-display" (click)="startEdit(record.id, field.key)">
+                      <div
+                        class="cell-display"
+                        role="button"
+                        tabindex="0"
+                        (click)="startEdit(record.id, field.key)"
+                        (keydown.enter)="startEdit(record.id, field.key)"
+                      >
                         @if (displayValue(record, field)) {
                           {{ displayValue(record, field) }}
                         } @else {

@@ -126,13 +126,19 @@ Multi-stage build: `node:22-alpine` builds the app (`npm ci && npm run build -- 
 ## Deployment
 
 GitHub Actions drive CI/CD:
-- `ci.yml` — on PR to `develop` or `main`: `npm ci`, `npm run lint`, `npm test -- --watch=false --browsers=ChromeHeadless`, `npm run build`
+- `ci.yml` — on PR to `develop` or `main`: `npm ci`, `npm run lint`, `npm test -- --watch=false`, `npm run build`
 - `deploy-fe-staging.yml` — on push to `main`: builds a Docker image (`BUILD_CONFIG=staging`), pushes to GCP Artifact Registry, deploys to Cloud Run (`relay4u-fe-staging`, `europe-west1`)
 - `deploy-fe-prod.yml` — on version tag push (`v*.*.*`): same flow, deploys to Cloud Run (`relay4u-fe-prod`, min 1 / max 10 instances)
+- `publish-docker.yml` — on version tag push (`v*.*.*`): builds a Docker image (`BUILD_CONFIG=sandbox`), publishes to `ghcr.io/prospect-tool-relay4u-eu/relay4u-fe`, for the [pentest sandbox](https://github.com/prospect-tool-relay4u-eu/prospect-tool-docker)
+
+## Docker sandbox for security testing
+
+A ready-to-run, self-contained Docker stack (Postgres + backend + frontend) for pentesters and security researchers is available at [`prospect-tool-docker`](https://github.com/prospect-tool-relay4u-eu/prospect-tool-docker) — no local build required, `docker compose up` and go. Findings can be reported as issues on that repo.
+
+This frontend also ships a `sandbox` build configuration (`npm run build:sandbox`) whose `environment.sandbox.ts` points `apiBase` at `http://localhost:8080/api`, matching the sandbox stack's port mapping.
 
 ## Known gaps
 
-- `ci.yml` runs `npm run lint`, but the repo currently has **no `lint` script and no ESLint configuration**. This CI step will fail until linting is set up — flagging this for contributors rather than silently working around it.
 - No end-to-end test framework is configured yet.
 
 ## Contributing

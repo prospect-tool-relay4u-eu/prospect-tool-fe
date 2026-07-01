@@ -1,7 +1,7 @@
 import { Component, DestroyRef, OnInit, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { FieldDefinition, Project, ProspectRecord } from '../../../core/models/project.model';
+import { FieldDefinition, ProspectRecord } from '../../../core/models/project.model';
 import { ProjectService } from '../../../core/services/project.service';
 import { RecordService } from '../../../core/services/record.service';
 import { NavbarComponent } from '../../shared/navbar/navbar.component';

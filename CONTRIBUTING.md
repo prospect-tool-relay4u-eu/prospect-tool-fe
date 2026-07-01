@@ -31,9 +31,7 @@ Runs unit tests via Vitest (Angular's `@angular/build:unit-test` builder).
 - `develop` is the default branch and the integration branch for all contributions — branch off `develop`, open your PR targeting `develop`
 - `main` is the stable/release branch: maintainers periodically open a `develop` → `main` PR to cut a release; pushes to `main` deploy to staging, and version tags (`v*.*.*`) deploy to production
 - Both `develop` and `main` are protected: a pull request and a passing CI run are required before merging — direct pushes aren't allowed
-- CI (`.github/workflows/ci.yml`) runs on every PR into `develop` or `main`: `npm ci`, `npm run lint`, `npm test -- --watch=false --browsers=ChromeHeadless`, `npm run build`
-
-> **Known gap:** the `npm run lint` CI step currently has no corresponding script or ESLint configuration in this repo, so it will fail as-is. If you're picking up work here, adding ESLint (with an Angular-appropriate config) and a `lint` script is a good first contribution.
+- CI (`.github/workflows/ci.yml`) runs on every PR into `develop` or `main`: `npm ci`, `npm run lint`, `npm test -- --watch=false`, `npm run build`
 
 ## Commit messages
 
@@ -48,6 +46,7 @@ change: rename ProjectTable column header component
 ## Code style
 
 - Formatting is enforced by **Prettier** (`printWidth: 100`, single quotes; HTML files use the `angular` parser) — run your editor's Prettier integration or `npx prettier --write .` before committing
+- Linting is enforced by **ESLint** via `@angular-eslint` (`npm run lint`), including template accessibility rules (keyboard handlers on interactive elements, labels associated with form controls, etc.) — run it before opening a PR
 - `.editorconfig` enforces 2-space indentation and trims trailing whitespace
 - Use **standalone components** — this project does not use NgModules
 - Prefer **signals** for local component/service state; use RxJS for async streams and bridge to signals with `toSignal`/`takeUntilDestroyed` where appropriate
