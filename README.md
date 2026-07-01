@@ -117,10 +117,16 @@ docker run -p 8080:80 prospect-tool-fe
 
 Multi-stage build: `node:22-alpine` builds the app (`npm ci && npm run build -- --configuration ${BUILD_CONFIG}`), then `nginx:alpine` serves the static output (`dist/eu-relay4u-prospecting/browser`) via `nginx.conf` on port 80.
 
+## Branching model
+
+- **`develop`** — default branch, where all contributor PRs land
+- **`main`** — stable/release branch; a `develop` → `main` PR is opened to cut a release
+- Both branches are protected: a pull request and a passing CI check are required before merging
+
 ## Deployment
 
 GitHub Actions drive CI/CD:
-- `ci.yml` — on PR to `main`: `npm ci`, `npm run lint`, `npm test -- --watch=false --browsers=ChromeHeadless`, `npm run build`
+- `ci.yml` — on PR to `develop` or `main`: `npm ci`, `npm run lint`, `npm test -- --watch=false --browsers=ChromeHeadless`, `npm run build`
 - `deploy-fe-staging.yml` — on push to `main`: builds a Docker image (`BUILD_CONFIG=staging`), pushes to GCP Artifact Registry, deploys to Cloud Run (`relay4u-fe-staging`, `europe-west1`)
 - `deploy-fe-prod.yml` — on version tag push (`v*.*.*`): same flow, deploys to Cloud Run (`relay4u-fe-prod`, min 1 / max 10 instances)
 
@@ -131,7 +137,7 @@ GitHub Actions drive CI/CD:
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for branching, commit style, and PR guidelines.
+This project is open source and welcomes contributions. See [CONTRIBUTING.md](CONTRIBUTING.md) for branching, commit style, and PR guidelines.
 
 ## License
 
