@@ -30,6 +30,9 @@
         <p class="auth-subtitle">Start managing your lists more effectively</p>
       </div>
 
+      @if (resumingSetup()) {
+        <div class="alert alert-info">For your security, please set a new password and re-verify your email to continue.</div>
+      }
       @if (error()) {
         <div class="alert alert-error">{{ error() }}</div>
       }
