@@ -4,7 +4,7 @@ Angular frontend for the EU Relay 4U prospecting tool — a schema-less prospect
 
 ## Overview
 
-Users register, verify their email with a 6-digit code, and log in to create **Projects**. Each project has user-defined **Fields** (like flexible spreadsheet columns — string, boolean, integer, or number), which are filled in as **Records** in an inline-editable data grid. This app is the UI consumed by the [`eu-relay-4u-prospecting-be`](../eu-relay-4u-prospecting-be) Spring Boot backend.
+Users register, verify their email with a 6-digit code, and log in to create **Projects**. Each project has user-defined **Fields** (like flexible spreadsheet columns — string, boolean, integer, or number), which are filled in as **Records** in an inline-editable data grid. This app talks to **two** backends: [`relay4u-auth-service-be`](https://github.com/prospect-tool-relay4u-eu/relay4u-auth-service-be) for authentication, and [`eu-relay-4u-prospecting-be`](https://github.com/prospect-tool-relay4u-eu/prospect-tool-be) for all project/record business logic. See [`documentation/`](documentation/README.md) for the detailed flow.
 
 ## Tech stack
 
@@ -52,18 +52,20 @@ All routes are lazy-loaded standalone components via `loadComponent`.
 - `authInterceptor` attaches `Authorization: Bearer <token>` to every outgoing HTTP request.
 - `httpErrorInterceptor` catches `401` responses (except calls to `/api/auth/*`) and forces `AuthService.logout()`.
 - `authGuard` blocks `/projects*` routes for unauthenticated users, redirecting to `/login`.
-- `AuthService` decodes the JWT payload client-side (`atob`) purely to display the logged-in user's email — this is not a trust boundary; all real authorization happens on the backend.
+- `AuthService` decodes the JWT payload client-side to display the logged-in user's name — this is not a trust boundary; all real authorization happens on the backend.
 
 ## API integration
 
-All requests go through `environment.apiBase` (e.g. `http://localhost:8080/api` in development).
+Requests are split across **two** backend base URLs:
 
-| Service | Backend endpoints |
-|---|---|
-| `AuthService` | `POST /auth/login`, `/auth/register`, `/auth/verify-email`, `/auth/resend-verification` |
-| `ProjectService` | `GET/POST /projects`, `GET/PUT/DELETE /projects/{id}`, `POST/DELETE /projects/{id}/fields[/{fieldId}]`, `PUT /projects/{id}/fields/order` |
-| `RecordService` | `GET/POST /projects/{id}/records`, `DELETE /projects/{id}/records` (bulk), `PUT/DELETE /records/{id}` |
-| `ThemeService` | No backend calls — client-side light/dark theme, persisted to `localStorage` |
+| Service | Base URL | Backend endpoints |
+|---|---|---|
+| `AuthService` | `environment.authApiBase` (auth service) | `POST /auth/login`, `/auth/register`, `/auth/verify-email`, `/auth/resend-verification` |
+| `ProjectService` | `environment.apiBase` (prospecting backend) | `GET/POST /projects`, `GET/PUT/DELETE /projects/{id}`, `POST/DELETE /projects/{id}/fields[/{fieldId}]`, `PUT /projects/{id}/fields/order` |
+| `RecordService` | `environment.apiBase` (prospecting backend) | `GET/POST /projects/{id}/records`, `DELETE /projects/{id}/records` (bulk), `PUT/DELETE /records/{id}` |
+| `ThemeService` | – | No backend calls — client-side light/dark theme, persisted to `localStorage` |
+
+See [`documentation/environments.md`](documentation/environments.md) for exact values per build configuration.
 
 ## Getting started
 
@@ -76,17 +78,11 @@ npm ci
 npm start
 ```
 
-The dev server runs at `http://localhost:4200`. The backend (`eu-relay-4u-prospecting-be`) must be running locally at `http://localhost:8080` for API calls to succeed.
+The dev server runs at `http://localhost:4200`. Both backends must be running locally: `eu-relay-4u-prospecting-be` at `http://localhost:8080` and `relay4u-auth-service-be` at `http://localhost:8081`.
 
 ## Environment configuration
 
-| File | Used by | `apiBase` |
-|---|---|---|
-| `src/environments/environment.ts` | `development` build/serve config (default) | `http://localhost:8080/api` |
-| `src/environments/environment.staging.ts` | `staging` build config | staging backend URL |
-| `src/environments/environment.prod.ts` | `production` build config (default for `ng build`) | production backend URL |
-
-Angular's file-replacement mechanism (`angular.json`) swaps in the right environment file per build configuration — there are no other environment variables to configure.
+See [`documentation/environments.md`](documentation/environments.md) for the full table of `apiBase`/`authApiBase` per build configuration (`development`, `sandbox`, `staging`, `production`), including a note on staging/prod `authApiBase` values still awaiting confirmation against a real deploy. Angular's file-replacement mechanism (`angular.json`) swaps in the right environment file per build configuration.
 
 ## Available scripts
 
