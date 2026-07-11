@@ -5,8 +5,8 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { Component, inject, signal } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { ThemeService } from '../../../core/services/theme.service';
 
@@ -25,9 +25,10 @@ function passwordsMatch(control: AbstractControl): ValidationErrors | null {
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   readonly theme = inject(ThemeService);
   private readonly fb = inject(FormBuilder);
 
@@ -44,6 +45,16 @@ export class RegisterComponent {
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
   readonly success = signal(false);
+  readonly resumingSetup = signal(false);
+
+  ngOnInit(): void {
+    const email = this.route.snapshot.queryParamMap.get('email');
+    const name = this.route.snapshot.queryParamMap.get('name');
+    if (email && name) {
+      this.form.patchValue({ email, name });
+      this.resumingSetup.set(true);
+    }
+  }
 
   submit(): void {
     if (this.form.invalid || this.loading()) return;

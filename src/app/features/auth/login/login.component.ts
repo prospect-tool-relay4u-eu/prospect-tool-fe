@@ -38,6 +38,12 @@ export class LoginComponent implements OnInit {
     this.auth.login(email!, password!).subscribe({
       next: () => this.router.navigate(['/dashboard']),
       error: err => {
+        if (err.status === 428) {
+          this.router.navigate(['/register'], {
+            queryParams: { email: err.error?.email, name: err.error?.name },
+          });
+          return;
+        }
         this.error.set(
           err.status === 401
             ? 'Invalid email or password.'

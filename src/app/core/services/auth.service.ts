@@ -18,6 +18,15 @@ import { environment } from '../../../environments/environment';
 
 const TOKEN_KEY = 'r4u-token';
 
+function decodeJwtPayload(token: string): Record<string, unknown> {
+  const base64Url = token.split('.')[1];
+  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  const binary = atob(base64);
+  const bytes = Uint8Array.from(binary, c => c.charCodeAt(0));
+  const json = new TextDecoder('utf-8').decode(bytes);
+  return JSON.parse(json);
+}
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly http = inject(HttpClient);
@@ -31,8 +40,8 @@ export class AuthService {
     const t = this._token();
     if (!t) return null;
     try {
-      const payload = JSON.parse(atob(t.split('.')[1]));
-      return payload['sub'] as string;
+      const payload = decodeJwtPayload(t);
+      return payload['name'] as string;
     } catch {
       return null;
     }
@@ -40,7 +49,7 @@ export class AuthService {
 
   login(email: string, password: string): Observable<LoginResponse> {
     return this.http
-      .post<LoginResponse>(`${environment.apiBase}/auth/login`, { email, password })
+      .post<LoginResponse>(`${environment.authApiBase}/auth/login`, { email, password })
       .pipe(
         tap(res => {
           this._token.set(res.token);
@@ -55,7 +64,7 @@ export class AuthService {
     password: string,
     confirmPassword: string
   ): Observable<RegisterResponse> {
-    return this.http.post<RegisterResponse>(`${environment.apiBase}/auth/register`, {
+    return this.http.post<RegisterResponse>(`${environment.authApiBase}/auth/register`, {
       name,
       email,
       password,
@@ -64,11 +73,11 @@ export class AuthService {
   }
 
   verifyEmail(email: string, code: string): Observable<void> {
-    return this.http.post<void>(`${environment.apiBase}/auth/verify-email`, { email, code });
+    return this.http.post<void>(`${environment.authApiBase}/auth/verify-email`, { email, code });
   }
 
   resendVerification(email: string): Observable<void> {
-    return this.http.post<void>(`${environment.apiBase}/auth/resend-verification`, { email });
+    return this.http.post<void>(`${environment.authApiBase}/auth/resend-verification`, { email });
   }
 
   logout(): void {

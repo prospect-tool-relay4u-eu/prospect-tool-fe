@@ -272,3 +272,9 @@ button {
   color: var(--color-success);
   border: 1px solid rgba(22, 163, 74, 0.2);
 }
+
+.alert-info {
+  background-color: var(--color-info-bg);
+  color: var(--color-info);
+  border: 1px solid rgba(37, 99, 235, 0.2);
+}
