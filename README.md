@@ -54,6 +54,16 @@ All routes are lazy-loaded standalone components via `loadComponent`.
 - `authGuard` blocks `/projects*` routes for unauthenticated users, redirecting to `/login`.
 - `AuthService` decodes the JWT payload client-side to display the logged-in user's name — this is not a trust boundary; all real authorization happens on the backend.
 
+### Password-reset redirect (HTTP 428)
+
+Some accounts have `password = NULL` on the auth service (manually migrated as a safety net, or an abandoned registration) — the backend rejects login for these with `428 Precondition Required` instead of a normal `401`, and includes `email`/`name` in the response body. This is handled **locally in `LoginComponent.submit()`'s error callback**, not in `httpErrorInterceptor` or `AuthService` — the component needs the `email`/`name` payload to redirect with prefilled query params:
+
+```
+428 on /auth/login → router.navigate(['/register'], { queryParams: { email, name } })
+```
+
+`RegisterComponent.ngOnInit()` reads those query params, pre-fills the form, and sets a `resumingSetup` signal that shows an info alert ("please set a new password and re-verify your email"). The user then goes through a normal register → verify-email → login cycle, ending with a fresh password on the same account.
+
 ## API integration
 
 Requests are split across **two** backend base URLs:
