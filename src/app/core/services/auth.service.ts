@@ -12,6 +12,7 @@ interface RegisterResponse {
   id: number;
   name: string;
   email: string;
+  verificationCode?: string | null;
 }
 
 import { environment } from '../../../environments/environment';
@@ -76,8 +77,10 @@ export class AuthService {
     return this.http.post<void>(`${environment.authApiBase}/auth/verify-email`, { email, code });
   }
 
-  resendVerification(email: string): Observable<void> {
-    return this.http.post<void>(`${environment.authApiBase}/auth/resend-verification`, { email });
+  resendVerification(email: string): Observable<RegisterResponse> {
+    return this.http.post<RegisterResponse>(`${environment.authApiBase}/auth/resend-verification`, {
+      email,
+    });
   }
 
   logout(): void {
