@@ -88,6 +88,7 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
     this.error.set(null);
     this.auth.verifyEmail(this.email(), this.form.value.code!).subscribe({
       next: () => {
+        this.auth.clearStagingCode();
         this.router.navigate(['/login'], { queryParams: { verified: 'true' } });
       },
       error: err => {

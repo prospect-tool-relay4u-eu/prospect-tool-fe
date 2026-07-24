@@ -1,0 +1,14 @@
+@if (stagingCode(); as code) {
+  <div class="staging-code-popup" role="status">
+    <div class="staging-code-popup-label">Staging verification code</div>
+    <div class="staging-code-popup-code">{{ code }}</div>
+    <button
+      type="button"
+      class="staging-code-popup-close"
+      (click)="dismiss()"
+      aria-label="Dismiss staging code"
+    >
+      &times;
+    </button>
+  </div>
+}
