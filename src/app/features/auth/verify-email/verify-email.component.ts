@@ -26,7 +26,6 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
   readonly resendLoading = signal(false);
   readonly resendError = signal<string | null>(null);
   readonly resendSuccess = signal(false);
-  readonly stagingCode = signal<string | null>(null);
 
   readonly codeTimeLeft = signal(CODE_EXPIRY_SECONDS);
   readonly resendCooldown = signal(RESEND_COOLDOWN_SECONDS);
@@ -88,6 +87,7 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
     this.error.set(null);
     this.auth.verifyEmail(this.email(), this.form.value.code!).subscribe({
       next: () => {
+        this.auth.clearStagingCode();
         this.router.navigate(['/login'], { queryParams: { verified: 'true' } });
       },
       error: err => {
@@ -102,12 +102,10 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
     this.resendLoading.set(true);
     this.resendError.set(null);
     this.resendSuccess.set(false);
-    this.stagingCode.set(null);
     this.auth.resendVerification(this.email()).subscribe({
-      next: res => {
+      next: () => {
         this.resendLoading.set(false);
         this.resendSuccess.set(true);
-        this.stagingCode.set(res.verificationCode ?? null);
         this.codeTimeLeft.set(CODE_EXPIRY_SECONDS);
         this.startCodeTimer();
         this.startResendCooldown();

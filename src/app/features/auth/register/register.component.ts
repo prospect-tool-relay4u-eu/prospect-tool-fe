@@ -46,7 +46,6 @@ export class RegisterComponent implements OnInit {
   readonly error = signal<string | null>(null);
   readonly success = signal(false);
   readonly resumingSetup = signal(false);
-  readonly stagingCode = signal<string | null>(null);
 
   ngOnInit(): void {
     const email = this.route.snapshot.queryParamMap.get('email');
@@ -63,9 +62,8 @@ export class RegisterComponent implements OnInit {
     this.loading.set(true);
     this.error.set(null);
     this.auth.register(name!, email!, password!, confirmPassword!).subscribe({
-      next: res => {
+      next: () => {
         this.success.set(true);
-        this.stagingCode.set(res.verificationCode ?? null);
         setTimeout(
           () => this.router.navigate(['/verify-email'], { queryParams: { email: encodeURIComponent(email!) } }),
           1500

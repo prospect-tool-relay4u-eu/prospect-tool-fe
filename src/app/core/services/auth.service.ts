@@ -34,8 +34,10 @@ export class AuthService {
   private readonly router = inject(Router);
 
   private readonly _token = signal<string | null>(sessionStorage.getItem(TOKEN_KEY));
+  private readonly _stagingCode = signal<string | null>(null);
 
   readonly isLoggedIn = computed(() => !!this._token());
+  readonly stagingCode = this._stagingCode.asReadonly();
 
   readonly userEmail = computed((): string | null => {
     const t = this._token();
@@ -65,12 +67,14 @@ export class AuthService {
     password: string,
     confirmPassword: string
   ): Observable<RegisterResponse> {
-    return this.http.post<RegisterResponse>(`${environment.authApiBase}/auth/register`, {
-      name,
-      email,
-      password,
-      confirmPassword,
-    });
+    return this.http
+      .post<RegisterResponse>(`${environment.authApiBase}/auth/register`, {
+        name,
+        email,
+        password,
+        confirmPassword,
+      })
+      .pipe(tap(res => this._stagingCode.set(res.verificationCode ?? null)));
   }
 
   verifyEmail(email: string, code: string): Observable<void> {
@@ -78,9 +82,15 @@ export class AuthService {
   }
 
   resendVerification(email: string): Observable<RegisterResponse> {
-    return this.http.post<RegisterResponse>(`${environment.authApiBase}/auth/resend-verification`, {
-      email,
-    });
+    return this.http
+      .post<RegisterResponse>(`${environment.authApiBase}/auth/resend-verification`, {
+        email,
+      })
+      .pipe(tap(res => this._stagingCode.set(res.verificationCode ?? null)));
+  }
+
+  clearStagingCode(): void {
+    this._stagingCode.set(null);
   }
 
   logout(): void {

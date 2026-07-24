@@ -39,9 +39,6 @@
       @if (success()) {
         <div class="alert alert-success">
           Account created! We've sent a verification code to your email.
-          @if (stagingCode()) {
-            <br><strong>Staging code: {{ stagingCode() }}</strong>
-          }
         </div>
       }
 

@@ -41,9 +41,6 @@
       @if (resendSuccess()) {
         <div class="alert alert-success">
           A new code has been sent!
-          @if (stagingCode()) {
-            <br><strong>Staging code: {{ stagingCode() }}</strong>
-          }
         </div>
       }
       @if (resendError()) {
