@@ -1,0 +1,8 @@
+<div class="toast-container">
+  @for (n of notifications(); track n.id) {
+    <div class="toast" [class.toast-success]="n.kind === 'success'" [class.toast-error]="n.kind === 'error'" [class.toast-info]="n.kind === 'info'">
+      <span class="toast-message">{{ n.message }}</span>
+      <button type="button" class="toast-dismiss" (click)="dismiss(n.id)" aria-label="Dismiss">×</button>
+    </div>
+  }
+</div>

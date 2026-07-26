@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { ThemeService } from '../../../core/services/theme.service';
+import { ErrorService } from '../../../core/services/error.service';
 
 const RESEND_COOLDOWN_SECONDS = 60;
 const CODE_EXPIRY_SECONDS = 15 * 60;
@@ -17,6 +18,7 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  private readonly errorService = inject(ErrorService);
   readonly theme = inject(ThemeService);
   private readonly fb = inject(FormBuilder);
 
@@ -92,7 +94,8 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
         this.router.navigate(['/login'], { queryParams: { verified: 'true' } });
       },
       error: err => {
-        this.error.set(this.mapVerifyError(err.status, err.error?.detail));
+        const apiError = this.errorService.parse(err);
+        this.error.set(this.errorService.messageFor(apiError));
         this.loading.set(false);
       },
     });
@@ -115,23 +118,9 @@ export class VerifyEmailComponent implements OnInit, OnDestroy {
       },
       error: err => {
         this.resendLoading.set(false);
-        this.resendError.set(
-          err.status === 429
-            ? 'Code sending limit exceeded. Please wait an hour.'
-            : 'Failed to send code. Please try again.'
-        );
+        const apiError = this.errorService.parse(err);
+        this.resendError.set(this.errorService.messageFor(apiError));
       },
     });
-  }
-
-  private mapVerifyError(status: number, detail?: string): string {
-    switch (status) {
-      case 400:
-        return detail ?? 'Invalid or expired verification code.';
-      case 423:
-        return 'Account locked after too many attempts. Please request a new code.';
-      default:
-        return 'An error occurred. Please try again.';
-    }
   }
 }
