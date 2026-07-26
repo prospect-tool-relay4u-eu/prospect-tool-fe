@@ -9,6 +9,9 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { ThemeService } from '../../../core/services/theme.service';
+import { ErrorService } from '../../../core/services/error.service';
+
+const PASSWORD_PATTERN = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[@$!%*?&]).*$/;
 
 function passwordsMatch(control: AbstractControl): ValidationErrors | null {
   const pw = control.get('password');
@@ -29,6 +32,7 @@ export class RegisterComponent implements OnInit {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  private readonly errorService = inject(ErrorService);
   readonly theme = inject(ThemeService);
   private readonly fb = inject(FormBuilder);
 
@@ -36,7 +40,7 @@ export class RegisterComponent implements OnInit {
     {
       name: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]],
+      password: ['', [Validators.required, Validators.minLength(8), Validators.pattern(PASSWORD_PATTERN)]],
       confirmPassword: ['', Validators.required],
     },
     { validators: passwordsMatch }
@@ -47,6 +51,7 @@ export class RegisterComponent implements OnInit {
   readonly success = signal(false);
   readonly resumingSetup = signal(false);
   readonly stagingCode = signal<string | null>(null);
+  readonly serverErrors = signal<Record<string, string>>({});
 
   ngOnInit(): void {
     const email = this.route.snapshot.queryParamMap.get('email');
@@ -62,6 +67,7 @@ export class RegisterComponent implements OnInit {
     const { name, email, password, confirmPassword } = this.form.value;
     this.loading.set(true);
     this.error.set(null);
+    this.serverErrors.set({});
     this.auth.register(name!, email!, password!, confirmPassword!).subscribe({
       next: res => {
         this.success.set(true);
@@ -72,10 +78,16 @@ export class RegisterComponent implements OnInit {
         );
       },
       error: err => {
+        const apiError = this.errorService.parse(err);
+        if (apiError.errors) {
+          this.serverErrors.set(apiError.errors);
+        }
         this.error.set(
           err.status === 409
             ? 'An account with this email already exists.'
-            : 'An error occurred. Please try again.'
+            : apiError.errors
+              ? null
+              : this.errorService.messageFor(apiError)
         );
         this.loading.set(false);
       },

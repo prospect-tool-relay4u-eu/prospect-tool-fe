@@ -3,6 +3,7 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { ThemeService } from '../../../core/services/theme.service';
+import { ErrorService } from '../../../core/services/error.service';
 
 @Component({
   selector: 'app-login',
@@ -14,6 +15,7 @@ export class LoginComponent implements OnInit {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  private readonly errorService = inject(ErrorService);
   readonly theme = inject(ThemeService);
   private readonly fb = inject(FormBuilder);
 
@@ -44,13 +46,8 @@ export class LoginComponent implements OnInit {
           });
           return;
         }
-        this.error.set(
-          err.status === 401
-            ? 'Invalid email or password.'
-            : err.status === 403
-              ? err.error?.detail ?? 'Account not verified. Check your email inbox.'
-              : 'An error occurred. Please try again.'
-        );
+        const apiError = this.errorService.parse(err);
+        this.error.set(this.errorService.messageFor(apiError));
         this.loading.set(false);
       },
     });

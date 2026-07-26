@@ -1,10 +1,13 @@
 import { Component, DestroyRef, OnInit, computed, inject, signal } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FieldType, Project, generateSlug } from '../../../core/models/project.model';
 import { ProjectService } from '../../../core/services/project.service';
 import { RecordService } from '../../../core/services/record.service';
 import { NavbarComponent } from '../../shared/navbar/navbar.component';
+import { ErrorService } from '../../../core/services/error.service';
+import { NotificationService } from '../../../core/services/notification.service';
 
 const TYPE_DISPLAY: Record<FieldType, string> = {
   STRING: 'Text',
@@ -25,6 +28,8 @@ export class ProjectSettingsComponent implements OnInit {
   private readonly projectService = inject(ProjectService);
   private readonly recordService = inject(RecordService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly errorService = inject(ErrorService);
+  private readonly notifications = inject(NotificationService);
 
   readonly projectId = Number(this.route.snapshot.paramMap.get('id'));
 
@@ -56,7 +61,10 @@ export class ProjectSettingsComponent implements OnInit {
   private refreshProject(): void {
     this.projectService.getProject(this.projectId)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(p => this.project.set(p));
+      .subscribe({
+        next: p => this.project.set(p),
+        error: err => this.notifyError(err),
+      });
   }
 
   startEditName(): void {
@@ -70,9 +78,12 @@ export class ProjectSettingsComponent implements OnInit {
     if (!name) return;
     this.projectService.updateProject(this.projectId, { name, description: this.descValue().trim() })
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => {
-        this.editingName.set(false);
-        this.refreshProject();
+      .subscribe({
+        next: () => {
+          this.editingName.set(false);
+          this.refreshProject();
+        },
+        error: err => this.notifyError(err),
       });
   }
 
@@ -99,10 +110,16 @@ export class ProjectSettingsComponent implements OnInit {
       order: this.sortedFields().length,
     })
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => {
-        this.newFieldLabel.set('');
-        this.newFieldType.set('STRING');
-        this.refreshProject();
+      .subscribe({
+        next: () => {
+          this.newFieldLabel.set('');
+          this.newFieldType.set('STRING');
+          this.refreshProject();
+        },
+        error: err => {
+          const apiError = this.errorService.parse(err);
+          this.addError.set(this.errorService.messageFor(apiError));
+        },
       });
   }
 
@@ -117,9 +134,12 @@ export class ProjectSettingsComponent implements OnInit {
   deleteField(fieldId: string): void {
     this.projectService.removeField(this.projectId, fieldId)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => {
-        this.fieldToDelete.set(null);
-        this.refreshProject();
+      .subscribe({
+        next: () => {
+          this.fieldToDelete.set(null);
+          this.refreshProject();
+        },
+        error: err => this.notifyError(err),
       });
   }
 
@@ -131,7 +151,10 @@ export class ProjectSettingsComponent implements OnInit {
     [ids[idx], ids[idx - 1]] = [ids[idx - 1], ids[idx]];
     this.projectService.reorderFields(this.projectId, ids)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.refreshProject());
+      .subscribe({
+        next: () => this.refreshProject(),
+        error: err => this.notifyError(err),
+      });
   }
 
   moveFieldDown(fieldId: string): void {
@@ -142,12 +165,23 @@ export class ProjectSettingsComponent implements OnInit {
     [ids[idx], ids[idx + 1]] = [ids[idx + 1], ids[idx]];
     this.projectService.reorderFields(this.projectId, ids)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.refreshProject());
+      .subscribe({
+        next: () => this.refreshProject(),
+        error: err => this.notifyError(err),
+      });
   }
 
   clearRecords(): void {
     this.recordService.deleteAllRecords(this.projectId)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.showClearConfirm.set(false));
+      .subscribe({
+        next: () => this.showClearConfirm.set(false),
+        error: err => this.notifyError(err),
+      });
+  }
+
+  private notifyError(err: unknown): void {
+    const apiError = this.errorService.parse(err as HttpErrorResponse);
+    this.notifications.error(this.errorService.messageFor(apiError));
   }
 }

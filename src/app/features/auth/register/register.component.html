@@ -81,13 +81,19 @@
             id="password"
             type="password"
             class="form-input"
-            [class.error]="form.controls.password.invalid && form.controls.password.touched"
+            [class.error]="(form.controls.password.invalid && form.controls.password.touched) || serverErrors()['password']"
             formControlName="password"
-            placeholder="Min. 8 characters"
+            placeholder="Min. 8 characters, 1 uppercase, 1 digit, 1 special character"
             autocomplete="new-password"
           />
-          @if (form.controls.password.invalid && form.controls.password.touched) {
+          @if (form.controls.password.errors?.['required'] && form.controls.password.touched) {
+            <span class="form-error">Password is required.</span>
+          } @else if (form.controls.password.errors?.['minlength'] && form.controls.password.touched) {
             <span class="form-error">Password must be at least 8 characters.</span>
+          } @else if (form.controls.password.errors?.['pattern'] && form.controls.password.touched) {
+            <span class="form-error">Password must contain an uppercase letter, a digit and a special character.</span>
+          } @else if (serverErrors()['password']) {
+            <span class="form-error">{{ serverErrors()['password'] }}</span>
           }
         </div>
 
